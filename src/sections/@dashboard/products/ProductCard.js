@@ -6,7 +6,6 @@ import { styled } from '@mui/material/styles';
 import { fCurrency } from '../../../utils/formatNumber';
 // components
 import Label from '../../../components/label';
-import { ColorPreview } from '../../../components/color-utils';
 
 // ----------------------------------------------------------------------
 
@@ -25,24 +24,25 @@ ShopProductCard.propTypes = {
 };
 
 export default function ShopProductCard({ product }) {
-  const { name, cover, price, colors, status, priceSale } = product;
+  const { name, cover, price, priceSale } = product;
 
   return (
     <Card>
       <Box sx={{ pt: '100%', position: 'relative' }}>
-        {status && (
+        {priceSale && (
           <Label
             variant="filled"
-            color={(status === 'sale' && 'error') || 'info'}
+            color="error"
             sx={{
               zIndex: 9,
               top: 16,
               right: 16,
               position: 'absolute',
               textTransform: 'uppercase',
+              textDecoration: 'line-through',
             }}
           >
-            {status}
+            {priceSale && fCurrency(priceSale)}
           </Label>
         )}
         <StyledProductImg alt={name} src={cover} />
@@ -56,21 +56,19 @@ export default function ShopProductCard({ product }) {
         </Link>
 
         <Stack direction="row" alignItems="center" justifyContent="space-between">
-          <ColorPreview colors={colors} />
-          <Typography variant="subtitle1">
-            <Typography
-              component="span"
-              variant="body1"
-              sx={{
-                color: 'text.disabled',
-                textDecoration: 'line-through',
-              }}
-            >
-              {priceSale && fCurrency(priceSale)}
-            </Typography>
+          <Typography variant="subtitle1">Code :</Typography>
+          <Typography variant="subtitle1">{price}</Typography>
+        </Stack>
+        <Stack direction="row" alignItems="center" justifyContent="space-between">
+          <Typography variant="subtitle1">Price :</Typography>
+          <Typography variant="subtitle2">
             &nbsp;
             {fCurrency(price)}
           </Typography>
+        </Stack>
+        <Stack direction="row" alignItems="center" justifyContent="space-between">
+          <Typography variant="subtitle2">Balance :</Typography>
+          <Typography variant="subtitle2">{10}</Typography>
         </Stack>
       </Stack>
     </Card>
