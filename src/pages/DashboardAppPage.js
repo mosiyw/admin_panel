@@ -36,19 +36,24 @@ export default function DashboardAppPage() {
 
         <Grid container spacing={3}>
           <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary title="Weekly Sales" total={714000} icon={'ant-design:android-filled'} />
+            <AppWidgetSummary title="Weekly Sales" total={30} icon={'uim:calender'} />
           </Grid>
 
           <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary title="New Users" total={1352831} color="info" icon={'ant-design:apple-filled'} />
+            <AppWidgetSummary title="Complete Orders" total={20} color="success" icon={'fa-solid:check'} />
           </Grid>
 
           <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary title="Item Orders" total={1723315} color="warning" icon={'ant-design:windows-filled'} />
+            <AppWidgetSummary title="Orders In Process" total={9} color="warning" icon={'uim:process'} />
           </Grid>
 
           <Grid item xs={12} sm={6} md={3}>
-            <AppWidgetSummary title="Bug Reports" total={234} color="error" icon={'ant-design:bug-filled'} />
+            <AppWidgetSummary
+              title="Awaiting Confirmation"
+              total={1}
+              color="secondary"
+              icon={'streamline:interface-page-controller-loading-3-progress-loading-dot-load-wait-waiting'}
+            />
           </Grid>
 
           <Grid item xs={12} md={6} lg={8}>

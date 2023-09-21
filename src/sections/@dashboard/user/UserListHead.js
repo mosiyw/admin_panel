@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 // @mui
-import { Box, Checkbox, TableRow, TableCell, TableHead, TableSortLabel } from '@mui/material';
+import { Box, TableRow, TableCell, TableHead, TableSortLabel } from '@mui/material';
 
 // ----------------------------------------------------------------------
 
@@ -19,22 +19,11 @@ const visuallyHidden = {
 UserListHead.propTypes = {
   order: PropTypes.oneOf(['asc', 'desc']),
   orderBy: PropTypes.string,
-  rowCount: PropTypes.number,
   headLabel: PropTypes.array,
-  numSelected: PropTypes.number,
   onRequestSort: PropTypes.func,
-  onSelectAllClick: PropTypes.func,
 };
 
-export default function UserListHead({
-  order,
-  orderBy,
-  rowCount,
-  headLabel,
-  numSelected,
-  onRequestSort,
-  onSelectAllClick,
-}) {
+export default function UserListHead({ order, orderBy, headLabel, onRequestSort }) {
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };
@@ -42,14 +31,7 @@ export default function UserListHead({
   return (
     <TableHead>
       <TableRow>
-        <TableCell padding="checkbox">
-          <Checkbox
-            indeterminate={numSelected > 0 && numSelected < rowCount}
-            checked={rowCount > 0 && numSelected === rowCount}
-            onChange={onSelectAllClick}
-          />
-        </TableCell>
-        {headLabel.map((headCell) => (
+        {headLabel.map((headCell, index) => (
           <TableCell
             key={headCell.id}
             align={headCell.alignRight ? 'right' : 'left'}
@@ -60,6 +42,7 @@ export default function UserListHead({
               active={orderBy === headCell.id}
               direction={orderBy === headCell.id ? order : 'asc'}
               onClick={createSortHandler(headCell.id)}
+              sx={index === 0 ? { marginLeft: 2 } : {}} // Add marginLeft for the first label
             >
               {headCell.label}
               {orderBy === headCell.id ? (

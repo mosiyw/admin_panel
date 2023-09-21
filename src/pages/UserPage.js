@@ -1,8 +1,7 @@
+import React, { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { filter } from 'lodash';
 import { sentenceCase } from 'change-case';
-import { useState } from 'react';
-// @mui
 import {
   Card,
   Table,
@@ -10,10 +9,9 @@ import {
   Paper,
   Avatar,
   Button,
-  Popover,
-  Checkbox,
   TableRow,
   MenuItem,
+  Popover,
   TableBody,
   TableCell,
   Container,
@@ -22,27 +20,20 @@ import {
   TableContainer,
   TablePagination,
 } from '@mui/material';
-// components
 import Label from '../components/label';
 import Iconify from '../components/iconify';
 import Scrollbar from '../components/scrollbar';
-// sections
 import { UserListHead, UserListToolbar } from '../sections/@dashboard/user';
-// mock
 import USERLIST from '../_mock/user';
-
-// ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
   { id: 'name', label: 'Name', alignRight: false },
-  { id: 'company', label: 'Company', alignRight: false },
-  { id: 'role', label: 'Role', alignRight: false },
-  { id: 'isVerified', label: 'Verified', alignRight: false },
+  { id: 'company', label: 'Username', alignRight: false },
+  { id: 'role', label: 'PhoneNumber', alignRight: false },
+  { id: 'isVerified', label: 'Email', alignRight: false },
   { id: 'status', label: 'Status', alignRight: false },
   { id: '' },
 ];
-
-// ----------------------------------------------------------------------
 
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
@@ -75,17 +66,10 @@ function applySortFilter(array, comparator, query) {
 
 export default function UserPage() {
   const [open, setOpen] = useState(null);
-
   const [page, setPage] = useState(0);
-
   const [order, setOrder] = useState('asc');
-
-  const [selected, setSelected] = useState([]);
-
   const [orderBy, setOrderBy] = useState('name');
-
   const [filterName, setFilterName] = useState('');
-
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
   const handleOpenMenu = (event) => {
@@ -100,30 +84,6 @@ export default function UserPage() {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
     setOrderBy(property);
-  };
-
-  const handleSelectAllClick = (event) => {
-    if (event.target.checked) {
-      const newSelecteds = USERLIST.map((n) => n.name);
-      setSelected(newSelecteds);
-      return;
-    }
-    setSelected([]);
-  };
-
-  const handleClick = (event, name) => {
-    const selectedIndex = selected.indexOf(name);
-    let newSelected = [];
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(selected.slice(0, selectedIndex), selected.slice(selectedIndex + 1));
-    }
-    setSelected(newSelected);
   };
 
   const handleChangePage = (event, newPage) => {
@@ -163,7 +123,7 @@ export default function UserPage() {
         </Stack>
 
         <Card>
-          <UserListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} />
+          <UserListToolbar filterName={filterName} onFilterName={handleFilterByName} />
 
           <Scrollbar>
             <TableContainer sx={{ minWidth: 800 }}>
@@ -173,24 +133,17 @@ export default function UserPage() {
                   orderBy={orderBy}
                   headLabel={TABLE_HEAD}
                   rowCount={USERLIST.length}
-                  numSelected={selected.length}
                   onRequestSort={handleRequestSort}
-                  onSelectAllClick={handleSelectAllClick}
                 />
                 <TableBody>
                   {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
                     const { id, name, role, status, company, avatarUrl, isVerified } = row;
-                    const selectedUser = selected.indexOf(name) !== -1;
 
                     return (
-                      <TableRow hover key={id} tabIndex={-1} role="checkbox" selected={selectedUser}>
-                        <TableCell padding="checkbox">
-                          <Checkbox checked={selectedUser} onChange={(event) => handleClick(event, name)} />
-                        </TableCell>
-
-                        <TableCell component="th" scope="row" padding="none">
+                      <TableRow hover key={id}>
+                        <TableCell component="th" scope="row" padding="normal">
                           <Stack direction="row" alignItems="center" spacing={2}>
-                            <Avatar alt={name} src={avatarUrl} />
+                            <Avatar alt={name} src={avatarUrl} sx={{ marginLeft: 2 }} /> {/* Add marginLeft here */}
                             <Typography variant="subtitle2" noWrap>
                               {name}
                             </Typography>
@@ -198,15 +151,11 @@ export default function UserPage() {
                         </TableCell>
 
                         <TableCell align="left">{company}</TableCell>
-
                         <TableCell align="left">{role}</TableCell>
-
                         <TableCell align="left">{isVerified ? 'Yes' : 'No'}</TableCell>
-
                         <TableCell align="left">
                           <Label color={(status === 'banned' && 'error') || 'success'}>{sentenceCase(status)}</Label>
                         </TableCell>
-
                         <TableCell align="right">
                           <IconButton size="large" color="inherit" onClick={handleOpenMenu}>
                             <Iconify icon={'eva:more-vertical-fill'} />
