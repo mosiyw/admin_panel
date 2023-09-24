@@ -1,4 +1,6 @@
 import { Helmet } from 'react-helmet-async';
+import { useNavigate } from 'react-router-dom';
+
 // @mui
 
 import { styled, alpha } from '@mui/material/styles';
@@ -28,6 +30,12 @@ const StyledSearch = styled(OutlinedInput)(({ theme }) => ({
 }));
 
 export default function ProductsPage() {
+  const navigate = useNavigate();
+
+  const handleNewProductClick = () => {
+    // Navigate to the /newproduct route
+    navigate('/dashboard/newproduct');
+  };
   return (
     <>
       <Helmet>
@@ -60,7 +68,12 @@ export default function ProductsPage() {
             </Button>
           </Stack>
           <Stack direction="row" spacing={1} flexShrink={0} sx={{ my: 1 }}>
-            <Button variant="contained" size="large" startIcon={<Iconify icon="eva:plus-fill" />}>
+            <Button
+              variant="contained"
+              size="large"
+              startIcon={<Iconify icon="eva:plus-fill" />}
+              onClick={handleNewProductClick}
+            >
               New Product
             </Button>
           </Stack>

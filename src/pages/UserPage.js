@@ -229,13 +229,12 @@ export default function UserPage() {
         }}
       >
         <MenuItem>
+          <Iconify icon={'fluent:history-24-filled'} sx={{ mr: 2 }} />
+          History
+        </MenuItem>
+        <MenuItem>
           <Iconify icon={'eva:edit-fill'} sx={{ mr: 2 }} />
           Edit
-        </MenuItem>
-
-        <MenuItem sx={{ color: 'error.main' }}>
-          <Iconify icon={'eva:trash-2-outline'} sx={{ mr: 2 }} />
-          Delete
         </MenuItem>
       </Popover>
     </>
