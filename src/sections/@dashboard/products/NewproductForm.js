@@ -84,7 +84,7 @@ const NewProductForm = ({ onSubmit }) => {
                     <MenuItem value="Electronics">Electronics</MenuItem>
                     <MenuItem value="Clothing">Clothing</MenuItem>
                     <MenuItem value="Home">Home</MenuItem>
-                    {/* Add more categories as needed */}
+                    {/* Add more categories as needed  */}
                   </Select>
                 )}
               />
