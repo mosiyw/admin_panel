@@ -1,13 +1,8 @@
 import PropTypes from 'prop-types';
-// @mui
-import { Box, Card, Link, Typography, Stack } from '@mui/material';
+import { Card, Typography, Stack, Box } from '@mui/material';
 import { styled } from '@mui/material/styles';
-// utils
-import { fCurrency } from '../../../utils/formatNumber';
-// components
 import Label from '../../../components/label';
-
-// ----------------------------------------------------------------------
+import { fCurrency } from '../../../utils/formatNumber';
 
 const StyledProductImg = styled('img')({
   top: 0,
@@ -17,19 +12,22 @@ const StyledProductImg = styled('img')({
   position: 'absolute',
 });
 
-// ----------------------------------------------------------------------
-
 ShopProductCard.propTypes = {
-  product: PropTypes.object,
+  product: PropTypes.shape({
+    name: PropTypes.string,
+    price: PropTypes.object,
+    image: PropTypes.object,
+    code: PropTypes.string,
+    balance: PropTypes.number,
+  }),
 };
-
 export default function ShopProductCard({ product }) {
-  const { name, cover, price, priceSale } = product;
+  const { name, price, image, code, balance } = product;
 
   return (
     <Card>
       <Box sx={{ pt: '100%', position: 'relative' }}>
-        {priceSale && (
+        {price.discount && (
           <Label
             variant="filled"
             color="error"
@@ -42,33 +40,29 @@ export default function ShopProductCard({ product }) {
               textDecoration: 'line-through',
             }}
           >
-            {priceSale && fCurrency(priceSale)}
+            {fCurrency(price.original)}
           </Label>
         )}
-        <StyledProductImg alt={name} src={cover} />
+        <StyledProductImg alt={name} src={image.cover} />
       </Box>
-
       <Stack spacing={2} sx={{ p: 3 }}>
-        <Link color="inherit" underline="hover">
-          <Typography variant="subtitle2" noWrap>
-            {name}
-          </Typography>
-        </Link>
-
+        <Typography variant="subtitle2" noWrap>
+          {name}
+        </Typography>
         <Stack direction="row" alignItems="center" justifyContent="space-between">
           <Typography variant="subtitle1">Code :</Typography>
-          <Typography variant="subtitle1">{price}</Typography>
+          <Typography variant="subtitle1">{code}</Typography>
         </Stack>
         <Stack direction="row" alignItems="center" justifyContent="space-between">
           <Typography variant="subtitle1">Price :</Typography>
           <Typography variant="subtitle2">
             &nbsp;
-            {fCurrency(price)}
+            {fCurrency(price.discount ? price.discount : price.original)}
           </Typography>
         </Stack>
         <Stack direction="row" alignItems="center" justifyContent="space-between">
           <Typography variant="subtitle2">Balance :</Typography>
-          <Typography variant="subtitle2">{10}</Typography>
+          <Typography variant="subtitle2">{balance}</Typography>
         </Stack>
       </Stack>
     </Card>

@@ -11,7 +11,7 @@ export default function NewProductPage() {
   const handleFormSubmit = async (data) => {
     try {
       const response = await axios.post('http://localhost:5000/api/products', data, {
-        withCredentials: true, // Include credentials (cookies) in the request
+        withCredentials: true,
       });
 
       // Check if the request was successful

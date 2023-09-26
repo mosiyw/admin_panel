@@ -4,7 +4,6 @@ import { TextField, Button, Grid, Paper, Typography, Select, MenuItem, FormContr
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 
-// eslint-disable-next-line react/prop-types
 const NewProductForm = ({ onSubmit }) => {
   const { handleSubmit, control, reset } = useForm();
   const [description, setDescription] = useState('');
@@ -13,7 +12,6 @@ const NewProductForm = ({ onSubmit }) => {
   const handleFormSubmit = (data) => {
     // Include the description from the state in the form data
     data.description = description;
-    onSubmit(data);
     reset();
   };
 
@@ -89,6 +87,23 @@ const NewProductForm = ({ onSubmit }) => {
                 )}
               />
             </FormControl>
+          </Grid>
+          <Grid item xs={4}>
+            <Controller
+              name="balance"
+              control={control}
+              defaultValue=""
+              render={({ field }) => (
+                <TextField {...field} label="Balance" variant="outlined" fullWidth type="number" />
+              )}
+            />
+
+            <Controller
+              name="code"
+              control={control}
+              defaultValue=""
+              render={({ field }) => <TextField {...field} label="Code" variant="outlined" fullWidth />}
+            />
           </Grid>
           <Grid item xs={12}>
             <Typography variant="subtitle1">Description</Typography>
