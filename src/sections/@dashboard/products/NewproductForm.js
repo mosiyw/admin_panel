@@ -52,6 +52,14 @@ const NewProductForm = ({ onSubmit }) => {
           </Grid>
           <Grid item xs={4}>
             <Controller
+              name="code"
+              control={control}
+              defaultValue=""
+              render={({ field }) => <TextField {...field} label="Code" variant="outlined" fullWidth />}
+            />
+          </Grid>
+          <Grid item xs={4}>
+            <Controller
               name="price.original"
               control={control}
               defaultValue=""
@@ -71,6 +79,16 @@ const NewProductForm = ({ onSubmit }) => {
             />
           </Grid>
           <Grid item xs={4}>
+            <Controller
+              name="balance"
+              control={control}
+              defaultValue=""
+              render={({ field }) => (
+                <TextField {...field} label="Balance" variant="outlined" fullWidth type="number" />
+              )}
+            />
+          </Grid>
+          <Grid item xs={8}>
             <FormControl variant="outlined" fullWidth>
               <InputLabel id="category-label">Category</InputLabel>
               <Controller
@@ -87,23 +105,6 @@ const NewProductForm = ({ onSubmit }) => {
                 )}
               />
             </FormControl>
-          </Grid>
-          <Grid item xs={4}>
-            <Controller
-              name="balance"
-              control={control}
-              defaultValue=""
-              render={({ field }) => (
-                <TextField {...field} label="Balance" variant="outlined" fullWidth type="number" />
-              )}
-            />
-
-            <Controller
-              name="code"
-              control={control}
-              defaultValue=""
-              render={({ field }) => <TextField {...field} label="Code" variant="outlined" fullWidth />}
-            />
           </Grid>
           <Grid item xs={12}>
             <Typography variant="subtitle1">Description</Typography>

@@ -1,13 +1,16 @@
 import { Helmet } from 'react-helmet-async';
+import { useNavigate } from 'react-router-dom'; // Import the useNavigate hook
 // @mui
 
 import axios from 'axios'; // Import Axios
 import { Container, Typography } from '@mui/material';
 import NewproductForm from '../sections/@dashboard/products/NewproductForm';
+import Iconify from '../components/iconify';
 
 // --------------------------------------------------------------
 
 export default function NewProductPage() {
+  const navigate = useNavigate(); // Get the navigation function
   const handleFormSubmit = async (data) => {
     try {
       const response = await axios.post('http://localhost:5000/api/products', data, {
@@ -28,12 +31,22 @@ export default function NewProductPage() {
     }
   };
 
+  const handleBackClick = () => {
+    navigate('/dashboard/products'); // Navigate to the desired route
+  };
+
   return (
     <>
       <Helmet>
-        <title> new product</title>
+        <title>New Product</title>
       </Helmet>
-
+      <Iconify
+        icon="ep:back"
+        width={24}
+        height={24}
+        style={{ cursor: 'pointer', marginBottom: '2vh' }}
+        onClick={handleBackClick} // Add the click handler here
+      />
       <Container>
         <Typography variant="h4" sx={{ mb: 5 }}>
           New Products
