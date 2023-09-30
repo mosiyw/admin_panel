@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'; // Import the useNavigate hook
 
 import axios from 'axios'; // Import Axios
 import { Container, Typography } from '@mui/material';
-import NewproductForm from '../sections/@dashboard/products/NewproductForm';
+import ProductForm from '../sections/@dashboard/products/ProductForm';
 import Iconify from '../components/iconify';
 
 // --------------------------------------------------------------
@@ -51,7 +51,7 @@ export default function NewProductPage() {
         <Typography variant="h4" sx={{ mb: 5 }}>
           New Products
         </Typography>
-        <NewproductForm onSubmit={handleFormSubmit} />
+        <ProductForm onSubmit={handleFormSubmit} />
       </Container>
     </>
   );

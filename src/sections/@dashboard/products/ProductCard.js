@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom'; // Import Link from React Router
 import { Card, Typography, Stack, Box } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import Label from '../../../components/label';
@@ -14,6 +15,7 @@ const StyledProductImg = styled('img')({
 
 ShopProductCard.propTypes = {
   product: PropTypes.shape({
+    _id: PropTypes.string,
     name: PropTypes.string,
     price: PropTypes.object,
     image: PropTypes.object,
@@ -21,8 +23,9 @@ ShopProductCard.propTypes = {
     balance: PropTypes.number,
   }),
 };
+
 export default function ShopProductCard({ product }) {
-  const { name, price, image, code, balance } = product;
+  const { name, _id, price, image, code, balance } = product;
 
   return (
     <Card>
@@ -46,12 +49,15 @@ export default function ShopProductCard({ product }) {
         <StyledProductImg alt={name} src={image.cover} />
       </Box>
       <Stack spacing={2} sx={{ p: 3 }}>
-        <Typography variant="subtitle2" noWrap>
-          {name}
-        </Typography>
+        {/* Wrap the product name with a Link */}
+        <Link to={`editproduct/${_id}`} style={{ textDecoration: 'none' }}>
+          <Typography variant="subtitle2" noWrap style={{ direction: 'rtl' }}>
+            {name}
+          </Typography>
+        </Link>
         <Stack direction="row" alignItems="center" justifyContent="space-between">
           <Typography variant="subtitle1">Code :</Typography>
-          <Typography variant="subtitle1">{code}</Typography>
+          <Typography variant="subtitle2">{code}</Typography>
         </Stack>
         <Stack direction="row" alignItems="center" justifyContent="space-between">
           <Typography variant="subtitle1">Price :</Typography>
