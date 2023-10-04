@@ -142,6 +142,14 @@ const ProductForm = ({ initialProductData, onSubmit, isEditing }) => {
               )}
             />
           </Grid>
+          <Grid item xs={4}>
+            <Controller
+              name="code"
+              control={control}
+              defaultValue="" // Set defaultValue here
+              render={({ field }) => <TextField {...field} label="Code" variant="outlined" fullWidth />}
+            />
+          </Grid>
           <Grid item xs={12}>
             <Typography variant="subtitle1">Description</Typography>
             <div style={{ height: '30vh', marginBottom: '8vh', marginTop: '2vh' }}>

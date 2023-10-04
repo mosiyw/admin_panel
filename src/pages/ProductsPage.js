@@ -1,6 +1,7 @@
 import { Helmet } from 'react-helmet-async';
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react'; // Import useState and useEffect
+import axios from 'axios';
 // @mui
 import { styled, alpha } from '@mui/material/styles';
 import { Container, Stack, Typography, Button, OutlinedInput, InputAdornment } from '@mui/material';
@@ -30,18 +31,15 @@ const StyledSearch = styled(OutlinedInput)(({ theme }) => ({
 export default function ProductsPage() {
   const navigate = useNavigate();
   const [products, setProducts] = useState([]); // State to store products data
+  // Fetch products data from the API
 
   useEffect(() => {
-    // Fetch products data from the API
     async function fetchProducts() {
       try {
-        const response = await fetch('http://localhost:5000/api/products'); // Adjust the URL to match your API endpoint
-        if (response.ok) {
-          const data = await response.json();
-          setProducts(data);
-        } else {
-          console.error('Failed to fetch products data');
-        }
+        const response = await axios.get('http://localhost:5000/api/products/allproduct', {
+          withCredentials: true,
+        });
+        setProducts(response.data);
       } catch (error) {
         console.error('Error fetching products data:', error);
       }
