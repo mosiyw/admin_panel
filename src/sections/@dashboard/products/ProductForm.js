@@ -1,13 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { TextField, Button, Grid, Paper, Typography, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import axios from 'axios';
+
+import Iconify from '../../../components/iconify';
 
 const ProductForm = ({ initialProductData, onSubmit, isEditing }) => {
   const { handleSubmit, control, reset } = useForm();
   const [description, setDescription] = useState('');
   const [displayImage, setDisplayImage] = useState(false);
+  const [coverImage, setCoverImage] = useState(null);
+  const [galleryImages, setGalleryImages] = useState([]);
 
   useEffect(() => {
     // Set default values based on isEditing and initialProductData
@@ -25,16 +30,20 @@ const ProductForm = ({ initialProductData, onSubmit, isEditing }) => {
       });
       setDescription(selectedProduct.description || '');
       setDisplayImage(!!selectedProduct.image?.cover); // Check if cover image exists
+      setGalleryImages(selectedProduct.image?.additional || []); // Set gallery images
     } else {
       reset();
       setDescription('');
       setDisplayImage(false); // Reset displayImage
+      setGalleryImages([]); // Reset galleryImages
     }
   }, [isEditing, initialProductData]);
 
   const handleFormSubmit = (data) => {
     // Include the description from the state in the form data
     data.description = description;
+    data.coverImage = coverImage;
+    data.galleryImages = galleryImages;
     delete data['price.original'];
     delete data['price.discount'];
     onSubmit(data);
@@ -43,6 +52,42 @@ const ProductForm = ({ initialProductData, onSubmit, isEditing }) => {
   const handleDescriptionChange = (value) => {
     setDescription(value);
   };
+
+  const handleImageUpload = (event, index) => {
+    const file = event.target.files[0];
+    const reader = new FileReader();
+
+    reader.onload = async (event) => {
+      const imageData = event.target.result;
+
+      if (index === 0) {
+        // If index is 0, set the cover image
+        setCoverImage(imageData);
+        setDisplayImage(true);
+      } else {
+        // If index is not 0, add the image to the gallery
+        const updatedGalleryImages = [...galleryImages];
+        updatedGalleryImages[index - 1] = imageData;
+        setGalleryImages(updatedGalleryImages);
+      }
+
+      try {
+        const response = await axios.post(
+          `http://localhost:5000/api/products/${initialProductData.product._id}/upload-image`,
+          {
+            image: imageData,
+            index,
+          }
+        );
+        console.log('Image upload successful:', response.data);
+      } catch (error) {
+        console.error('Error uploading image:', error);
+      }
+    };
+
+    reader.readAsDataURL(file);
+  };
+
   return (
     <Paper elevation={3} style={{ padding: '20px' }}>
       <Typography variant="h6" gutterBottom>
@@ -50,7 +95,7 @@ const ProductForm = ({ initialProductData, onSubmit, isEditing }) => {
       </Typography>
       <form onSubmit={handleSubmit(handleFormSubmit)}>
         <Grid container spacing={2}>
-          <Grid item xs={12}>
+          <Grid item xs={2}>
             {displayImage ? (
               <Grid item xs={2}>
                 {/* Display cover image if it exists */}
@@ -58,18 +103,77 @@ const ProductForm = ({ initialProductData, onSubmit, isEditing }) => {
                   <img
                     src={initialProductData.product.image.cover}
                     alt="Product Cover"
-                    style={{ maxWidth: '100%', maxHeight: '400px', objectFit: 'cover' }}
+                    style={{ width: '100%', maxHeight: '400px', objectFit: 'cover' }}
                   />
                 )}
               </Grid>
             ) : null}
-            {/* Add Image Upload Component Here */}
+            {/* Add Image Upload Components Here */}
             {/* You can use a file input to upload images */}
-            <input type="file" accept="image/*" multiple style={{ display: 'none' }} />
-            <Button variant="outlined" component="label" fullWidth htmlFor="image-upload">
-              Upload Images
+            <input
+              type="file"
+              accept="image/*"
+              multiple
+              style={{ display: 'none' }}
+              id="cover-image-upload"
+              onChange={(event) => handleImageUpload(event, 0)}
+            />
+            <Button
+              variant="outlined"
+              component="label"
+              fullWidth
+              htmlFor="cover-image-upload"
+              style={{ aspectRatio: '1/1' }}
+            >
+              {displayImage ? (
+                'Replace Cover Image'
+              ) : (
+                <>
+                  <Iconify icon="tabler:camera-plus" /> <span style={{ marginLeft: '8px' }}>Add Cover</span>
+                </>
+              )}
             </Button>
           </Grid>
+          {[1, 2, 3, 4, 5].map((index) => (
+            <Grid item xs={2} key={index}>
+              {galleryImages[index - 1] ? (
+                <Grid item xs={2}>
+                  {/* Display gallery image if it exists */}
+                  <img
+                    src={galleryImages[index - 1]}
+                    alt="test"
+                    style={{ maxWidth: '100%', maxHeight: '400px', objectFit: 'cover' }}
+                  />
+                </Grid>
+              ) : null}
+              {/* Add Image Upload Components Here */}
+              {/* You can use a file input to upload images */}
+              <input
+                type="file"
+                accept="image/*"
+                multiple
+                style={{ display: 'none' }}
+                id={`gallery-image-upload-${index}`}
+                onChange={(event) => handleImageUpload(event, index)}
+              />
+              <Button
+                variant="outlined"
+                component="label"
+                fullWidth
+                htmlFor={`gallery-image-upload-${index}`}
+                disabled={!displayImage && index !== 1}
+                style={{ aspectRatio: '1/1' }}
+              >
+                {galleryImages[index - 1] ? (
+                  `Replace Gallery Image ${index}`
+                ) : (
+                  <>
+                    <Iconify icon="tabler:camera-plus" /> <span style={{ marginLeft: '8px' }}>Add Image</span>
+                  </>
+                )}
+              </Button>
+            </Grid>
+          ))}
           <Grid item xs={12}>
             <Controller
               name="name"
