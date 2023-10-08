@@ -170,6 +170,7 @@ const ProductForm = ({ initialProductData, onSubmit, isEditing }) => {
                   <>
                     <Iconify icon="tabler:camera-plus" /> <span style={{ marginLeft: '8px' }}>Add Image</span>
                   </>
+                  
                 )}
               </Button>
             </Grid>
