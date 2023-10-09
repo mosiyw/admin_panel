@@ -5,6 +5,7 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import axios from 'axios';
 
+import '../../../styles/productForm.css';
 import Iconify from '../../../components/iconify';
 
 const ProductForm = ({ initialProductData, onSubmit, isEditing }) => {
@@ -97,42 +98,61 @@ const ProductForm = ({ initialProductData, onSubmit, isEditing }) => {
         <Grid container spacing={2}>
           <Grid item xs={2}>
             {displayImage ? (
-              <Grid item xs={2}>
+              <>
                 {/* Display cover image if it exists */}
                 {initialProductData.product.image?.cover && (
-                  <img
-                    src={initialProductData.product.image.cover}
-                    alt="Product Cover"
-                    style={{ width: '100%', maxHeight: '400px', objectFit: 'cover' }}
-                  />
+                  <>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      multiple
+                      style={{ display: 'none' }}
+                      id="cover-image-upload"
+                      onChange={(event) => handleImageUpload(event, 0)}
+                    />
+                    <Button
+                      variant="outlined"
+                      className="UploadButton"
+                      component="label"
+                      fullWidth
+                      htmlFor="cover-image-upload"
+                      style={{ aspectRatio: '1/1', width: '100%' }}
+                    >
+                      <img
+                        src={initialProductData.product.image.cover}
+                        alt="Product Cover"
+                        style={{ width: '100%', maxHeight: '400px', objectFit: 'cover' }}
+                      />
+                      <span>Replace Cover</span>
+                    </Button>
+                  </>
                 )}
-              </Grid>
-            ) : null}
+              </>
+            ) : (
+              <>
+                <input
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  style={{ display: 'none' }}
+                  id="cover-image-upload"
+                  onChange={(event) => handleImageUpload(event, 0)}
+                />
+                <Button
+                  variant="outlined"
+                  component="label"
+                  fullWidth
+                  htmlFor="cover-image-upload"
+                  style={{ aspectRatio: '1/1' }}
+                >
+                  <>
+                    <Iconify icon="tabler:camera-plus" /> <span style={{ marginLeft: '8px' }}>Add Cover</span>
+                  </>
+                </Button>
+              </>
+            )}
             {/* Add Image Upload Components Here */}
             {/* You can use a file input to upload images */}
-            <input
-              type="file"
-              accept="image/*"
-              multiple
-              style={{ display: 'none' }}
-              id="cover-image-upload"
-              onChange={(event) => handleImageUpload(event, 0)}
-            />
-            <Button
-              variant="outlined"
-              component="label"
-              fullWidth
-              htmlFor="cover-image-upload"
-              style={{ aspectRatio: '1/1' }}
-            >
-              {displayImage ? (
-                'Replace Cover Image'
-              ) : (
-                <>
-                  <Iconify icon="tabler:camera-plus" /> <span style={{ marginLeft: '8px' }}>Add Cover</span>
-                </>
-              )}
-            </Button>
           </Grid>
           {[1, 2, 3, 4, 5].map((index) => (
             <Grid item xs={2} key={index}>
@@ -170,7 +190,6 @@ const ProductForm = ({ initialProductData, onSubmit, isEditing }) => {
                   <>
                     <Iconify icon="tabler:camera-plus" /> <span style={{ marginLeft: '8px' }}>Add Image</span>
                   </>
-                  
                 )}
               </Button>
             </Grid>
