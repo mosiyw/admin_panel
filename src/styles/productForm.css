@@ -1,4 +1,4 @@
-.UploadButton span {
+.UploadButton .replaceText {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -7,7 +7,7 @@
   color: black;
 }
 
-.UploadButton:hover span {
+.UploadButton:hover .replaceText {
   display: block;
   visibility: visible;
 }
