@@ -72,35 +72,13 @@ const ProductForm = ({ initialProductData, onSubmit, isEditing }) => {
 
     reader.onload = async (event) => {
       const imageData = event.target.result;
-
-      if (index === 0) {
-        // If index is 0, set the cover image
-        setCoverImage(imageData);
-        setDisplayImage(true);
-      } else {
-        // If index is not 0, add the image to the gallery
-        const updatedGalleryImages = [...galleryImages];
-        updatedGalleryImages[index - 1] = imageData;
-        setGalleryImages(updatedGalleryImages);
-      }
-
-      try {
-        const response = await axios.post(
-          `http://localhost:5000/api/products/${initialProductData.product._id}/upload-image`,
-          {
-            image: imageData,
-            index,
-          }
-        );
-        console.log('Image upload successful:', response.data);
-      } catch (error) {
-        console.error('Error uploading image:', error);
-      }
+      const updatedGalleryImages = [...galleryImages];
+      updatedGalleryImages[index - 1] = imageData;
+      setGalleryImages(updatedGalleryImages);
     };
 
     reader.readAsDataURL(file);
   };
-
   return (
     <Paper elevation={3} style={{ padding: '20px' }}>
       <Typography variant="h6" gutterBottom>
@@ -109,65 +87,34 @@ const ProductForm = ({ initialProductData, onSubmit, isEditing }) => {
       <form onSubmit={handleSubmit(handleFormSubmit)}>
         <Grid container spacing={2}>
           <Grid item xs={2}>
-            {displayImage ? (
-              <>
-                {/* Display cover image if it exists */}
-                {initialProductData.product.image?.cover ||
-                  (coverImage && (
-                    <>
-                      <input
-                        type="file"
-                        accept="image/*"
-                        multiple
-                        style={{ display: 'none' }}
-                        id="cover-image-upload"
-                        onChange={(event) => handleCoverUpload(event, 0)}
-                      />
-                      <Button
-                        variant="outlined"
-                        className="UploadButton"
-                        component="label"
-                        fullWidth
-                        htmlFor="cover-image-upload"
-                        style={{ aspectRatio: '1/1', width: '100%' }}
-                      >
-                        <img
-                          src={
-                            initialProductData.product.image.cover ? initialProductData.product.image.cover : coverImage
-                          }
-                          alt="Product Cover"
-                          style={{ width: '100%', maxHeight: '400px', objectFit: 'cover' }}
-                        />
-                        <span className="replaceText">Replace Cover</span>
-                      </Button>
-                    </>
-                  ))}
-              </>
-            ) : (
-              <>
-                <input
-                  type="file"
-                  accept="image/*"
-                  multiple
-                  style={{ display: 'none' }}
-                  id="cover-image-upload"
-                  onChange={(event) => handleImageUpload(event, 0)}
-                />
-                <Button
-                  variant="outlined"
-                  component="label"
-                  fullWidth
-                  htmlFor="cover-image-upload"
-                  style={{ aspectRatio: '1/1' }}
-                >
-                  <>
-                    <Iconify icon="tabler:camera-plus" /> <span style={{ marginLeft: '8px' }}>Add Cover</span>
-                  </>
-                </Button>
-              </>
-            )}
-            {/* Add Image Upload Components Here */}
-            {/* You can use a file input to upload images */}
+            <input
+              type="file"
+              accept="image/*"
+              multiple
+              style={{ display: 'none' }}
+              id="cover-image-upload"
+              onChange={(event) => handleCoverUpload(event)}
+            />
+            <Button
+              variant="outlined"
+              component="label"
+              fullWidth
+              className="UploadButton"
+              style={{ aspectRatio: '1/1' }}
+            >
+              <img
+                src={initialProductData.product.image.cover ? initialProductData.product.image.cover : coverImage}
+                alt="Product Cover"
+                style={{ width: '100%', maxHeight: '400px', objectFit: 'cover' }}
+              />
+              {initialProductData.product.image.cover ? (
+                <span className="replaceText">Replace Cover</span>
+              ) : (
+                <>
+                  <Iconify icon="tabler:camera-plus" /> <span style={{ marginLeft: '8px' }}>Add Cover</span>
+                </>
+              )}
+            </Button>
           </Grid>
           {[1, 2, 3, 4, 5].map((index) => (
             <Grid item xs={2} key={index}>
