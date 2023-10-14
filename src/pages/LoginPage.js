@@ -9,7 +9,7 @@ import Logo from '../components/logo';
 // sections
 import { LoginForm } from '../sections/auth/login';
 
-// ----------------------------------------------------------------------
+/// ----------------------------------------------------------------------
 
 const StyledRoot = styled('div')(({ theme }) => ({
   [theme.breakpoints.up('md')]: {
