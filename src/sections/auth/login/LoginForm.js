@@ -4,67 +4,35 @@ import { useNavigate } from 'react-router-dom';
 import { Link, Stack, IconButton, InputAdornment, TextField, Checkbox } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 // components
+
+import { useMutation } from '@tanstack/react-query';
+import toast from 'react-hot-toast';
 import Iconify from '../../../components/iconify';
+import { postLogin } from '../../../api/auth';
 
 // ----------------------------------------------------------------------
 
 export default function LoginForm() {
   const navigate = useNavigate();
-  // const [loading, setLoading] = useState(false);
+
   const [emailInput, setEmail] = useState('');
   const [passwordInput, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleClick = async () => {
-    try {
-      // Use the email and password from the state variables
-      const loginData = {
-        email: emailInput,
-        password: passwordInput,
-      };
+  const mutateLogin = useMutation({
+    mutationFn: postLogin,
+    onSuccess: (data) => {
+      console.log(data);
+      toast.success(data.message);
+    },
+    onError(error) {
+      toast.error(error?.response?.data?.error);
+    },
+  });
 
-      // Send a POST request to login
-      const loginResponse = await fetch('http://localhost:5000/api/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(loginData),
-        credentials: 'include',
-      });
-
-      if (loginResponse.ok) {
-        const loginResult = await loginResponse.json();
-
-        if (loginResult.token) {
-          // If login is successful and a token is received
-          console.log('Login successful');
-
-          if (loginResult.isAdmin === true) {
-            // User is an admin
-            navigate('/dashboard', { replace: true });
-          } else {
-            // User is not an admin
-            console.log('Unauthorized');
-          }
-
-          // Access the user profile data from the login result
-          // eslint-disable-next-line prefer-destructuring
-          const userProfile = loginResult.userProfile;
-          console.log('User Profile:', userProfile);
-          // You can use the user profile data as needed
-        } else {
-          console.log('Token not received');
-        }
-      } else {
-        console.log('Error:', loginResponse.status, loginResponse.statusText);
-      }
-    } catch (error) {
-      console.error('Error:', error);
-    }
+  const handleClick = () => {
+    mutateLogin.mutate({ email: emailInput, password: passwordInput });
   };
-
-  // Call the handleClick function when needed, e.g., in response to a button click
 
   return (
     <>
@@ -95,7 +63,14 @@ export default function LoginForm() {
         </Link>
       </Stack>
 
-      <LoadingButton fullWidth size="large" type="submit" variant="contained" onClick={handleClick}>
+      <LoadingButton
+        loading={mutateLogin.isPending}
+        fullWidth
+        size="large"
+        type="submit"
+        variant="contained"
+        onClick={handleClick}
+      >
         Login
       </LoadingButton>
     </>
