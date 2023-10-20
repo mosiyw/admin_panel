@@ -11,7 +11,7 @@ const queryClient = new QueryClient();
 
 function App() {
   return (
-    <AuthProvider authName="_auth" authType="localstorage" cookieDomain={window.location.hostname} cookieSecure={false}>
+    <AuthProvider authName="token" authType="localstorage" cookieDomain={window.location.hostname} cookieSecure={false}>
       <QueryClientProvider client={queryClient}>
         <HelmetProvider>
           <ThemeProvider>

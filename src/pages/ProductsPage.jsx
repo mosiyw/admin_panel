@@ -1,7 +1,5 @@
 import { Helmet } from "react-helmet-async";
 import { useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react"; // Import useState and useEffect
-import axios from "axios";
 // @mui
 import { styled, alpha } from "@mui/material/styles";
 import { Container, Stack, Typography, Button, OutlinedInput, InputAdornment } from "@mui/material";
@@ -81,7 +79,7 @@ export default function ProductsPage() {
             </Button>
           </Stack>
         </Stack>
-        {/* <ProductList products={products} /> */}
+        <ProductList products={productsList.data} />
       </Container>
     </>
   );

@@ -1,3 +1,4 @@
+/* eslint-disable react/require-default-props */
 import PropTypes from "prop-types";
 // @mui
 import { styled } from "@mui/material/styles";
@@ -9,8 +10,9 @@ import Iconify from "../../../components/iconify";
 //
 import Searchbar from "./Searchbar";
 import AccountPopover from "./AccountPopover";
-import LanguagePopover from "./LanguagePopover";
+// import LanguagePopover from "./LanguagePopover";
 import NotificationsPopover from "./NotificationsPopover";
+import ToggleDark from "./ToggleDark";
 
 // ----------------------------------------------------------------------
 
@@ -38,10 +40,6 @@ const StyledToolbar = styled(Toolbar)(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-Header.propTypes = {
-  onOpenNav: PropTypes.func,
-};
-
 export default function Header({ onOpenNav }) {
   return (
     <StyledRoot>
@@ -68,6 +66,7 @@ export default function Header({ onOpenNav }) {
             sm: 1,
           }}
         >
+          <ToggleDark />
           <NotificationsPopover />
           <AccountPopover />
         </Stack>
@@ -75,3 +74,7 @@ export default function Header({ onOpenNav }) {
     </StyledRoot>
   );
 }
+
+Header.propTypes = {
+  onOpenNav: PropTypes.func,
+};

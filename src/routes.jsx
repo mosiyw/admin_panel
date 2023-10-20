@@ -16,7 +16,7 @@ import OrdersPage from "./pages/OrdersPage";
 const router = createBrowserRouter([
   {
     index: true,
-    element: <Navigate to="/login" replace />,
+    element: <Navigate to="/dashboard" replace />,
   },
   {
     path: "/dashboard",

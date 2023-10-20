@@ -1,3 +1,4 @@
+/* eslint-disable react/require-default-props */
 import PropTypes from "prop-types";
 import { set, sub } from "date-fns";
 import { noCase } from "change-case";
@@ -183,18 +184,6 @@ export default function NotificationsPopover() {
 
 // ----------------------------------------------------------------------
 
-NotificationItem.propTypes = {
-  notification: PropTypes.shape({
-    createdAt: PropTypes.instanceOf(Date),
-    id: PropTypes.string,
-    isUnRead: PropTypes.bool,
-    title: PropTypes.string,
-    description: PropTypes.string,
-    type: PropTypes.string,
-    avatar: PropTypes.any,
-  }),
-};
-
 function NotificationItem({ notification }) {
   const { avatar, title } = renderContent(notification);
 
@@ -232,6 +221,18 @@ function NotificationItem({ notification }) {
     </ListItemButton>
   );
 }
+
+NotificationItem.propTypes = {
+  notification: PropTypes.shape({
+    createdAt: PropTypes.instanceOf(Date),
+    id: PropTypes.string,
+    isUnRead: PropTypes.bool,
+    title: PropTypes.string,
+    description: PropTypes.string,
+    type: PropTypes.string,
+    avatar: PropTypes.any,
+  }),
+};
 
 // ----------------------------------------------------------------------
 

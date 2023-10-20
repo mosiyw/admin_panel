@@ -26,8 +26,10 @@ function LoginForm() {
         signIn({
           token: data.token,
           expiresIn: 36000,
-          tokenType: "Bearer",
-          authState: {},
+          tokenType: "token",
+          authState: {
+            role: "admin",
+          },
         });
 
         navigate("/dashboard");

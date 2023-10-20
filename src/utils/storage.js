@@ -1,5 +1,7 @@
+import Cookies from "js-cookie";
+
 const storage = {
-  getToken: () => window.localStorage.getItem("_auth"),
+  getToken: () => Cookies.get("token"),
   getTokenType: () => window.localStorage.getItem("_auth_type"),
   setToken: (token) => {
     window.localStorage.setItem("token", JSON.stringify(token));

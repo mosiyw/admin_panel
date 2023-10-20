@@ -1,3 +1,5 @@
+/* eslint-disable react/require-default-props */
+/* eslint-disable react/forbid-prop-types */
 import PropTypes from "prop-types";
 import { NavLink as RouterLink } from "react-router-dom";
 // @mui
@@ -6,10 +8,6 @@ import { Box, List, ListItemText } from "@mui/material";
 import { StyledNavItem, StyledNavItemIcon } from "./styles";
 
 // ----------------------------------------------------------------------
-
-NavSection.propTypes = {
-  data: PropTypes.array,
-};
 
 export default function NavSection({ data = [], ...other }) {
   return (
@@ -23,11 +21,11 @@ export default function NavSection({ data = [], ...other }) {
   );
 }
 
-// ----------------------------------------------------------------------
-
-NavItem.propTypes = {
-  item: PropTypes.object,
+NavSection.propTypes = {
+  data: PropTypes.array,
 };
+
+// ----------------------------------------------------------------------
 
 function NavItem({ item }) {
   const { title, path, icon, info } = item;
@@ -52,3 +50,7 @@ function NavItem({ item }) {
     </StyledNavItem>
   );
 }
+
+NavItem.propTypes = {
+  item: PropTypes.object,
+};
