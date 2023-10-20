@@ -6,9 +6,11 @@ import axios from "axios";
 import { styled, alpha } from "@mui/material/styles";
 import { Container, Stack, Typography, Button, OutlinedInput, InputAdornment } from "@mui/material";
 // components
+import { useQuery } from "@tanstack/react-query";
 import { ProductList } from "../sections/@dashboard/products";
 // mock
 import Iconify from "../components/iconify";
+import { getProductsList } from "../api/products";
 
 // ----------------------------------------------------------------------
 
@@ -30,23 +32,8 @@ const StyledSearch = styled(OutlinedInput)(({ theme }) => ({
 
 export default function ProductsPage() {
   const navigate = useNavigate();
-  const [products, setProducts] = useState([]); // State to store products data
-  // Fetch products data from the API
 
-  useEffect(() => {
-    async function fetchProducts() {
-      try {
-        const response = await axios.get("http://localhost:5000/api/products/allproduct", {
-          withCredentials: true,
-        });
-        setProducts(response.data);
-      } catch (error) {
-        console.error("Error fetching products data:", error);
-      }
-    }
-
-    fetchProducts();
-  }, []);
+  const productsList = useQuery({ queryKey: ["products-list"], queryFn: getProductsList });
 
   const handleNewProductClick = () => {
     // Navigate to the /newproduct route
@@ -94,7 +81,7 @@ export default function ProductsPage() {
             </Button>
           </Stack>
         </Stack>
-        <ProductList products={products} /> {/* Pass the fetched products data */}
+        {/* <ProductList products={products} /> */}
       </Container>
     </>
   );

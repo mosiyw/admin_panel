@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import Axios from "axios";
 import storage from "../../utils/storage";
 
@@ -12,11 +13,12 @@ export const axios = Axios.create(defaultOptions);
 
 axios.interceptors.request.use((config) => {
   const token = storage.getToken();
-  const tokenType = storage.getTokenType();
+  console.log(token);
+  // const tokenType = storage.getTokenType();
 
   if (token) {
     config.headers = config.headers || {};
-    config.headers.Authorization = `${tokenType} ${token}`;
+    config.headers.Cookie = `token=${token}`;
   }
 
   return config;
