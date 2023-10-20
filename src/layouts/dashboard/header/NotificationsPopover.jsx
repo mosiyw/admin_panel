@@ -1,3 +1,5 @@
+/* eslint-disable no-use-before-define */
+/* eslint-disable react/forbid-prop-types */
 /* eslint-disable react/require-default-props */
 import PropTypes from "prop-types";
 import { set, sub } from "date-fns";
