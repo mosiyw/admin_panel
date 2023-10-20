@@ -12,8 +12,7 @@ const ProductForm = ({ initialProductData, onSubmit, isEditing }) => {
   const { handleSubmit, control, reset } = useForm();
   const [description, setDescription] = useState('');
   const [displayImage, setDisplayImage] = useState(false);
-  const [coverImage, setCoverImage] = useState();
-  const [galleryImages, setGalleryImages] = useState([]);
+  const [imageArray, setImageArray] = useState([]);
 
   useEffect(() => {
     // Set default values based on isEditing and initialProductData
@@ -31,20 +30,22 @@ const ProductForm = ({ initialProductData, onSubmit, isEditing }) => {
       });
       setDescription(selectedProduct.description || '');
       setDisplayImage(!!selectedProduct.image?.cover); // Check if cover image exists
-      setGalleryImages(selectedProduct.image?.additional || []); // Set gallery images
+      setImageArray([selectedProduct.image?.cover || '', ...(selectedProduct.image.images || [])]); // Set image array
     } else {
       reset();
       setDescription('');
       setDisplayImage(false); // Reset displayImage
-      setGalleryImages([]); // Reset galleryImages
+      setImageArray([]); // Reset imageArray
     }
   }, [isEditing, initialProductData]);
 
   const handleFormSubmit = (data) => {
     // Include the description from the state in the form data
     data.description = description;
-    data.coverImage = coverImage;
-    data.galleryImages = galleryImages;
+    data.image = {
+      cover: imageArray[0],
+      additional: imageArray.slice(1),
+    };
     delete data['price.original'];
     delete data['price.discount'];
     onSubmit(data);
@@ -54,31 +55,24 @@ const ProductForm = ({ initialProductData, onSubmit, isEditing }) => {
     setDescription(value);
   };
 
-  // Cover upload handler
-  const handleCoverUpload = (event) => {
-    const file = event.target.files[0];
-    const reader = new FileReader();
-
-    reader.onload = async (event) => {
-      const imageData = event.target.result;
-      setCoverImage(imageData);
-      setDisplayImage(true);
-    };
-  };
-
+  // Cover and gallery image upload handler
   const handleImageUpload = (event, index) => {
     const file = event.target.files[0];
     const reader = new FileReader();
 
     reader.onload = async (event) => {
       const imageData = event.target.result;
-      const updatedGalleryImages = [...galleryImages];
-      updatedGalleryImages[index - 1] = imageData;
-      setGalleryImages(updatedGalleryImages);
+      const updatedImageArray = [...imageArray];
+      updatedImageArray[index] = imageData;
+      setImageArray(updatedImageArray);
+      if (index === 0) {
+        setDisplayImage(true);
+      }
     };
 
     reader.readAsDataURL(file);
   };
+  console.log(imageArray);
   return (
     <Paper elevation={3} style={{ padding: '20px' }}>
       <Typography variant="h6" gutterBottom>
@@ -90,25 +84,27 @@ const ProductForm = ({ initialProductData, onSubmit, isEditing }) => {
             <input
               type="file"
               accept="image/*"
-              multiple
               style={{ display: 'none' }}
               id="cover-image-upload"
-              onChange={(event) => handleCoverUpload(event)}
+              onChange={(event) => handleImageUpload(event, 0)}
             />
             <Button
               variant="outlined"
               component="label"
               fullWidth
+              htmlFor="cover-image-upload"
               className="UploadButton"
               style={{ aspectRatio: '1/1' }}
             >
-              <img
-                src={initialProductData.product.image.cover ? initialProductData.product.image.cover : coverImage}
-                alt="Product Cover"
-                style={{ width: '100%', maxHeight: '400px', objectFit: 'cover' }}
-              />
-              {initialProductData.product.image.cover ? (
-                <span className="replaceText">Replace Cover</span>
+              {displayImage ? (
+                <div>
+                  <img
+                    src={imageArray[0]}
+                    alt="Product Cover"
+                    style={{ width: '100%', maxHeight: '400px', objectFit: 'cover' }}
+                  />
+                  <span className="replaceText">Replace Cover</span>
+                </div>
               ) : (
                 <>
                   <Iconify icon="tabler:camera-plus" /> <span style={{ marginLeft: '8px' }}>Add Cover</span>
@@ -121,10 +117,10 @@ const ProductForm = ({ initialProductData, onSubmit, isEditing }) => {
               <input
                 type="file"
                 accept="image/*"
-                multiple
                 style={{ display: 'none' }}
                 id={`gallery-image-upload-${index}`}
                 onChange={(event) => handleImageUpload(event, index)}
+                disabled={index > imageArray.length}
               />
               <Button
                 variant="outlined"
@@ -132,13 +128,13 @@ const ProductForm = ({ initialProductData, onSubmit, isEditing }) => {
                 fullWidth
                 className="UploadButton"
                 htmlFor={`gallery-image-upload-${index}`}
-                disabled={!displayImage && index !== 1}
+                disabled={index > imageArray.length}
                 style={{ aspectRatio: '1/1' }}
               >
-                {galleryImages[index - 1] ? (
+                {imageArray[index] ? (
                   <>
                     <img
-                      src={galleryImages[index - 1]}
+                      src={imageArray[index]}
                       alt="test"
                       style={{ maxWidth: '100%', maxHeight: '400px', objectFit: 'cover' }}
                     />
@@ -164,7 +160,7 @@ const ProductForm = ({ initialProductData, onSubmit, isEditing }) => {
             <Controller
               name="price.original"
               control={control}
-              defaultValue="" // Set defaultValue here
+              defaultValue=""
               render={({ field }) => (
                 <TextField {...field} label="Original Price" variant="outlined" fullWidth type="number" />
               )}
@@ -174,7 +170,7 @@ const ProductForm = ({ initialProductData, onSubmit, isEditing }) => {
             <Controller
               name="price.discount"
               control={control}
-              defaultValue="" // Set defaultValue here
+              defaultValue=""
               render={({ field }) => (
                 <TextField {...field} label="Discount Price" variant="outlined" fullWidth type="number" />
               )}
@@ -212,7 +208,7 @@ const ProductForm = ({ initialProductData, onSubmit, isEditing }) => {
             <Controller
               name="isActive"
               control={control}
-              defaultValue={false} // Set defaultValue for isActive
+              defaultValue={false}
               render={({ field }) => (
                 <FormControl fullWidth variant="outlined">
                   <InputLabel id="is-active-label">Status</InputLabel>
@@ -228,7 +224,7 @@ const ProductForm = ({ initialProductData, onSubmit, isEditing }) => {
             <Controller
               name="code"
               control={control}
-              defaultValue="" // Set defaultValue here
+              defaultValue=""
               render={({ field }) => <TextField {...field} label="Code" variant="outlined" fullWidth />}
             />
           </Grid>
