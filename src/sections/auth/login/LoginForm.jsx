@@ -1,20 +1,19 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-// @mui
 import { Link, Stack, IconButton, InputAdornment, TextField, Checkbox } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
-// components
-
 import { useMutation } from "@tanstack/react-query";
 import toast from "react-hot-toast";
+import { useSignIn } from "react-auth-kit";
 import Iconify from "../../../components/iconify";
 import { postLogin } from "../../../api/auth";
 
 // ----------------------------------------------------------------------
 
-export default function LoginForm() {
+function LoginForm() {
   const navigate = useNavigate();
+  const signIn = useSignIn();
 
   const [emailInput, setEmail] = useState("");
   const [passwordInput, setPassword] = useState("");
@@ -23,6 +22,16 @@ export default function LoginForm() {
   const mutateLogin = useMutation({
     mutationFn: postLogin,
     onSuccess: (data) => {
+      if (data.isAdmin) {
+        signIn({
+          token: data.token,
+          expiresIn: 36000,
+          tokenType: "Bearer",
+          authState: {},
+        });
+
+        navigate("/dashboard");
+      }
       toast.success(data.message);
     },
     onError(error) {
@@ -76,3 +85,5 @@ export default function LoginForm() {
     </>
   );
 }
+
+export default LoginForm;

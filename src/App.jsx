@@ -1,28 +1,27 @@
-import { BrowserRouter } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "react-hot-toast";
+import { AuthProvider } from "react-auth-kit";
 import Router from "./routes";
 import ThemeProvider from "./theme";
 import { StyledChart } from "./components/chart";
-import ScrollToTop from "./components/scroll-to-top";
+// import ScrollToTop from "./components/scroll-to-top";
 
 const queryClient = new QueryClient();
 
 function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <HelmetProvider>
-        <BrowserRouter>
+    <AuthProvider authName="_auth" authType="localstorage" cookieDomain={window.location.hostname} cookieSecure={false}>
+      <QueryClientProvider client={queryClient}>
+        <HelmetProvider>
           <ThemeProvider>
             <Toaster />
-            <ScrollToTop />
             <StyledChart />
             <Router />
           </ThemeProvider>
-        </BrowserRouter>
-      </HelmetProvider>
-    </QueryClientProvider>
+        </HelmetProvider>
+      </QueryClientProvider>
+    </AuthProvider>
   );
 }
 

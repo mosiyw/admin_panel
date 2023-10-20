@@ -5,6 +5,7 @@ import { styled } from "@mui/material/styles";
 //
 import Header from "./header";
 import Nav from "./nav";
+import AuthRequired from "./AuthRequired";
 
 // ----------------------------------------------------------------------
 
@@ -36,14 +37,14 @@ export default function DashboardLayout() {
   const [open, setOpen] = useState(false);
 
   return (
-    <StyledRoot>
-      <Header onOpenNav={() => setOpen(true)} />
-
-      <Nav openNav={open} onCloseNav={() => setOpen(false)} />
-
-      <Main>
-        <Outlet />
-      </Main>
-    </StyledRoot>
+    <AuthRequired>
+      <StyledRoot>
+        <Header onOpenNav={() => setOpen(true)} />
+        <Nav openNav={open} onCloseNav={() => setOpen(false)} />
+        <Main>
+          <Outlet />
+        </Main>
+      </StyledRoot>
+    </AuthRequired>
   );
 }
