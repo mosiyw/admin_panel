@@ -54,10 +54,10 @@ export default function Nav({ openNav, onCloseNav }) {
       }}
     >
       <Box sx={{ px: 2.5, py: 3, display: "flex", flexDirection: "column" }}>
-        <Logo />
+        {/* <Logo /> */}
       </Box>
 
-      <Box sx={{ flexGrow: 1, display: "flex", flexDirection: "column", justifyContent: "center", marginTop: "-10vh" }}>
+      <Box sx={{flexGrow: 1, display: "flex", flexDirection: "column", justifyContent: "center" }}>
         <NavSection data={navConfig} />
       </Box>
     </Scrollbar>
