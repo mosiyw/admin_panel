@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { filter } from "lodash";
 import { sentenceCase } from "change-case";
+import "../styles/users.css";
 import {
   Card,
   Table,
@@ -137,13 +138,13 @@ export default function UserPage() {
                 />
                 <TableBody>
                   {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                    const { id, name, role, status, company, avatarUrl, isVerified } = row;
+                    const { id, name, role, status, company, isVerified } = row;
 
                     return (
                       <TableRow hover key={id}>
                         <TableCell component="th" scope="row" padding="normal">
                           <Stack direction="row" alignItems="center" spacing={2}>
-                            <Avatar alt={name} src={avatarUrl} sx={{ marginLeft: 2 }} /> {/* Add marginLeft here */}
+                            <Avatar alt={name} sx={{ marginLeft: 2 }} /> {/* Add marginLeft here */}
                             <Typography variant="subtitle2" noWrap>
                               {name}
                             </Typography>
@@ -170,7 +171,6 @@ export default function UserPage() {
                     </TableRow>
                   )}
                 </TableBody>
-
                 {isNotFound && (
                   <TableBody>
                     <TableRow>
