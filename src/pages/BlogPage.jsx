@@ -1,7 +1,7 @@
 import { Helmet } from "react-helmet-async";
 // @mui
 import { Grid, Button, Container, Stack, Typography } from "@mui/material";
-// components
+//  components
 import Iconify from "../components/iconify";
 import { BlogPostCard, BlogPostsSort, BlogPostsSearch } from "../sections/@dashboard/blog";
 // mock
