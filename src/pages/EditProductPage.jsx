@@ -12,7 +12,9 @@ function EditProductPage() {
     // Fetch product data based on the product ID from the URL when the component mounts
     const fetchData = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/products/admin/${id}`); // Replace with your API endpoint
+        const response = await axios.get(`http://localhost:5000/api/products/admin/${id}`, {
+          withCredentials: true,
+        }); // Replace with your API endpoint
         setProductData(response.data);
       } catch (error) {
         console.error("Error fetching product data:", error);

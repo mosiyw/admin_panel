@@ -1,0 +1,55 @@
+/* UploadTab.css */
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 5%;
+  padding-left: 10%;
+  padding-right: 10%;
+}
+
+.fileBox {
+  border: 2px dashed #aaa;
+  padding: 20px;
+  margin: 16px 0;
+  width: 100%;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.fileBox:hover {
+  border-color: #333;
+}
+
+.input {
+  display: none; /* Hide the default file input */
+}
+
+.button {
+  margin-top: 16px;
+}
+.main-container {
+  background-color: #fff;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  padding-top: 0.5%;
+  padding-bottom: 0.5%;
+  width: 60vw;
+  height: 80vh;
+  border-radius: 10px;
+}
+.gridContainer {
+  padding-right: 2%;
+  margin-top: 2%;
+  max-height: 45vh !important; /* Adjust as needed */
+  overflow-y: auto;
+}
+.img-card {
+  transition: transform 0.3s;
+}
+
+.img-card:hover {
+  transform: scale(1.05);
+}

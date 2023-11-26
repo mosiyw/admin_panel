@@ -1,13 +1,25 @@
 /* eslint-disable react/prop-types */
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
-import { TextField, Button, Grid, Paper, Typography, Select, MenuItem, FormControl, InputLabel } from "@mui/material";
+import {
+  Modal,
+  TextField,
+  Button,
+  Grid,
+  Paper,
+  Typography,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
+} from "@mui/material";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import axios from "axios";
 
 import "../../../styles/productForm.css";
 import Iconify from "../../../components/iconify";
+import ImageGallery from "../../../components/image-upload/imageUpload";
 
 function ProductForm({ initialProductData, onSubmit, isEditing }) {
   const { handleSubmit, control, reset } = useForm();
@@ -15,6 +27,7 @@ function ProductForm({ initialProductData, onSubmit, isEditing }) {
   const [displayImage, setDisplayImage] = useState(false);
   const [coverImage, setCoverImage] = useState();
   const [galleryImages, setGalleryImages] = useState([]);
+  const [openModal, setOpenModal] = useState(false);
 
   useEffect(() => {
     // Set default values based on isEditing and initialProductData
@@ -44,7 +57,7 @@ function ProductForm({ initialProductData, onSubmit, isEditing }) {
   const handleFormSubmit = (data) => {
     // Include the description from the state in the form data
     data.description = description;
-    data.coverImage = coverImage;
+    data.image = { cover: coverImage };
     data.galleryImages = galleryImages;
     delete data["price.original"];
     delete data["price.discount"];
@@ -53,18 +66,6 @@ function ProductForm({ initialProductData, onSubmit, isEditing }) {
 
   const handleDescriptionChange = (value) => {
     setDescription(value);
-  };
-
-  // Cover upload handler
-  const handleCoverUpload = (event) => {
-    const file = event.target.files[0];
-    const reader = new FileReader();
-
-    reader.onload = async (event) => {
-      const imageData = event.target.result;
-      setCoverImage(imageData);
-      setDisplayImage(true);
-    };
   };
 
   const handleImageUpload = (event, index) => {
@@ -80,36 +81,47 @@ function ProductForm({ initialProductData, onSubmit, isEditing }) {
 
     reader.readAsDataURL(file);
   };
+  const handleOpenModal = () => {
+    setOpenModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setOpenModal(false);
+    console.log(coverImage);
+  };
+  const ImageGalleryWithRef = React.forwardRef((props, ref) => <ImageGallery ref={ref} {...props} />);
   return (
     <Paper elevation={3} style={{ padding: "20px" }}>
+      <Modal open={openModal} onClose={handleCloseModal}>
+        <ImageGalleryWithRef setCoverImage={setCoverImage} handleCloseModal={handleCloseModal} />
+      </Modal>
       <Typography variant="h6" gutterBottom>
         {isEditing ? "Edit Product" : "New Product"}
       </Typography>
       <form onSubmit={handleSubmit(handleFormSubmit)}>
         <Grid container spacing={2}>
           <Grid item xs={2}>
-            <input
-              type="file"
-              accept="image/*"
-              multiple
-              style={{ display: "none" }}
-              id="cover-image-upload"
-              onChange={(event) => handleCoverUpload(event)}
-            />
             <Button
               variant="outlined"
               component="label"
               fullWidth
               className="UploadButton"
               style={{ aspectRatio: "1/1" }}
+              onClick={handleOpenModal}
             >
-              <img
-                src={initialProductData.product.image.cover ? initialProductData.product.image.cover : coverImage}
-                alt="Product Cover"
-                style={{ width: "100%", maxHeight: "400px", objectFit: "cover" }}
-              />
-              {initialProductData.product.image.cover ? (
-                <span className="replaceText">Replace Cover</span>
+              {initialProductData?.product?.image?.cover || coverImage ? (
+                <div>
+                  <img
+                    src={
+                      coverImage || initialProductData?.product?.image?.cover
+                        ? coverImage || initialProductData?.product?.image?.cover
+                        : null
+                    }
+                    alt="Product Cover"
+                    style={{ width: "100%", maxHeight: "400px", objectFit: "cover" }}
+                  />
+                  <span className="replaceText">Replace Cover</span>
+                </div>
               ) : (
                 <>
                   <Iconify icon="tabler:camera-plus" /> <span style={{ marginLeft: "8px" }}>Add Cover</span>
@@ -119,14 +131,6 @@ function ProductForm({ initialProductData, onSubmit, isEditing }) {
           </Grid>
           {[1, 2, 3, 4, 5].map((index) => (
             <Grid item xs={2} key={index}>
-              <input
-                type="file"
-                accept="image/*"
-                multiple
-                style={{ display: "none" }}
-                id={`gallery-image-upload-${index}`}
-                onChange={(event) => handleImageUpload(event, index)}
-              />
               <Button
                 variant="outlined"
                 component="label"
