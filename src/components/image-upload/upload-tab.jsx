@@ -3,7 +3,7 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Input from "@mui/material/Input";
 
-export default function UploadTab() {
+export default function UploadTab({ setImage, handleCloseModal }) {
   const [selectedFile, setSelectedFile] = useState(null);
   const [title, setTitle] = useState("");
   const [displayedImage, setDisplayedImage] = useState(null);
@@ -35,10 +35,11 @@ export default function UploadTab() {
 
       const data = await response.json();
       console.log(data);
-
+      setImage(`http://localhost:5000${data.imageUrl}`);
       setTitle("");
       setSelectedFile(null);
       setDisplayedImage("");
+      handleCloseModal();
     } catch (error) {
       console.error("Error:", error);
     }

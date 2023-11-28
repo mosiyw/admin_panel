@@ -28,9 +28,9 @@ function ProductForm({ initialProductData, onSubmit, isEditing }) {
   const [coverImage, setCoverImage] = useState();
   const [galleryImages, setGalleryImages] = useState([]);
   const [openModal, setOpenModal] = useState(false);
+  const [modalType, setModalType] = useState();
 
   useEffect(() => {
-    // Set default values based on isEditing and initialProductData
     if (isEditing && initialProductData) {
       const selectedProduct = initialProductData.product;
 
@@ -44,20 +44,22 @@ function ProductForm({ initialProductData, onSubmit, isEditing }) {
         isActive: selectedProduct.isActive || false,
       });
       setDescription(selectedProduct.description || "");
+      setCoverImage(selectedProduct.image?.cover || "");
       setDisplayImage(!!selectedProduct.image?.cover); // Check if cover image exists
-      setGalleryImages(selectedProduct.image?.additional || []); // Set gallery images
-    } else {
-      reset();
+      setGalleryImages(selectedProduct.image?.images || []); // Set gallery images
+    } else if (!isEditing) {
+      reset(); // Reset form when not in editing mode
       setDescription("");
       setDisplayImage(false); // Reset displayImage
       setGalleryImages([]); // Reset galleryImages
     }
-  }, [isEditing, initialProductData]);
+  }, [isEditing, initialProductData, reset]);
 
+  console.log(galleryImages);
   const handleFormSubmit = (data) => {
     // Include the description from the state in the form data
     data.description = description;
-    data.image = { cover: coverImage };
+    data.image = { cover: coverImage, images: galleryImages };
     data.galleryImages = galleryImages;
     delete data["price.original"];
     delete data["price.discount"];
@@ -68,32 +70,37 @@ function ProductForm({ initialProductData, onSubmit, isEditing }) {
     setDescription(value);
   };
 
-  const handleImageUpload = (event, index) => {
-    const file = event.target.files[0];
-    const reader = new FileReader();
+  const handleImageUpload = (imageUrl) => {
+    // Find the first empty index in galleryImages
+    const emptyIndex = galleryImages.findIndex((image) => !image);
 
-    reader.onload = async (event) => {
-      const imageData = event.target.result;
+    // If there's an empty index, set the imageUrl at that index
+    if (emptyIndex !== -1) {
       const updatedGalleryImages = [...galleryImages];
-      updatedGalleryImages[index - 1] = imageData;
+      updatedGalleryImages[emptyIndex] = imageUrl;
       setGalleryImages(updatedGalleryImages);
-    };
-
-    reader.readAsDataURL(file);
+    } else {
+      // If there's no empty index, append the imageUrl to the end of galleryImages
+      setGalleryImages([...galleryImages, imageUrl]);
+    }
   };
-  const handleOpenModal = () => {
+  const handleOpenModal = (props) => {
     setOpenModal(true);
+    setModalType(props);
   };
 
   const handleCloseModal = () => {
     setOpenModal(false);
-    console.log(coverImage);
   };
   const ImageGalleryWithRef = React.forwardRef((props, ref) => <ImageGallery ref={ref} {...props} />);
   return (
     <Paper elevation={3} style={{ padding: "20px" }}>
       <Modal open={openModal} onClose={handleCloseModal}>
-        <ImageGalleryWithRef setCoverImage={setCoverImage} handleCloseModal={handleCloseModal} />
+        {modalType === "cover" ? (
+          <ImageGalleryWithRef setImage={setCoverImage} handleCloseModal={handleCloseModal} />
+        ) : (
+          <ImageGalleryWithRef setImage={handleImageUpload} handleCloseModal={handleCloseModal} />
+        )}
       </Modal>
       <Typography variant="h6" gutterBottom>
         {isEditing ? "Edit Product" : "New Product"}
@@ -107,20 +114,22 @@ function ProductForm({ initialProductData, onSubmit, isEditing }) {
               fullWidth
               className="UploadButton"
               style={{ aspectRatio: "1/1" }}
-              onClick={handleOpenModal}
+              onClick={() => {
+                if (!coverImage) {
+                  handleOpenModal("cover");
+                } else {
+                  setCoverImage("");
+                }
+              }}
             >
-              {initialProductData?.product?.image?.cover || coverImage ? (
+              {coverImage ? (
                 <div>
                   <img
-                    src={
-                      coverImage || initialProductData?.product?.image?.cover
-                        ? coverImage || initialProductData?.product?.image?.cover
-                        : null
-                    }
+                    src={coverImage ? coverImage : null}
                     alt="Product Cover"
                     style={{ width: "100%", maxHeight: "400px", objectFit: "cover" }}
                   />
-                  <span className="replaceText">Replace Cover</span>
+                  <span className="replaceText">Delete Cover</span>
                 </div>
               ) : (
                 <>
@@ -135,9 +144,21 @@ function ProductForm({ initialProductData, onSubmit, isEditing }) {
                 variant="outlined"
                 component="label"
                 fullWidth
+                onClick={() => {
+                  if (!galleryImages[index - 1]) {
+                    handleOpenModal("gallery");
+                  } else {
+                    // Create a new array without the item at the current index
+                    const newGalleryImages = [...galleryImages];
+                    newGalleryImages.splice(index - 1, 1);
+
+                    // Update the galleryImages state
+                    setGalleryImages(newGalleryImages);
+                  }
+                }}
                 className="UploadButton"
                 htmlFor={`gallery-image-upload-${index}`}
-                disabled={!displayImage && index !== 1}
+                disabled={index > galleryImages.length + 1}
                 style={{ aspectRatio: "1/1" }}
               >
                 {galleryImages[index - 1] ? (
@@ -147,7 +168,7 @@ function ProductForm({ initialProductData, onSubmit, isEditing }) {
                       alt="test"
                       style={{ maxWidth: "100%", maxHeight: "400px", objectFit: "cover" }}
                     />
-                    <span className="replaceText">Replace Image</span>
+                    <span className="replaceText">Delete Image</span>
                   </>
                 ) : (
                   <>

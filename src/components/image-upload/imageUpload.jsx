@@ -9,7 +9,7 @@ import GalleryTab from "./gallery-tab";
 import UploadTab from "./upload-tab";
 import { useEffect } from "react";
 
-function ImageGallery({ setCoverImage, handleCloseModal }) {
+function ImageGallery({ setImage, handleCloseModal }) {
   const [value, setValue] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -44,12 +44,10 @@ function ImageGallery({ setCoverImage, handleCloseModal }) {
         <Tab label="Upload" />
       </Tabs>
       <div role="tabpanel" hidden={value !== 0}>
-        {value === 0 && (
-          <GalleryTab results={searchTerm} setCoverImage={setCoverImage} handleCloseModal={handleCloseModal} />
-        )}
+        {value === 0 && <GalleryTab results={searchTerm} setImage={setImage} handleCloseModal={handleCloseModal} />}
       </div>
       <div role="tabpanel" hidden={value !== 1}>
-        {value === 1 && <UploadTab />}
+        {value === 1 && <UploadTab setImage={setImage} handleCloseModal={handleCloseModal} />}
       </div>
     </div>
   );
