@@ -26,6 +26,7 @@ ShopProductCard.propTypes = {
 
 export default function ShopProductCard({ product }) {
   const { name, _id, price, image, code, balance } = product;
+  const URL = "http://localhost:5000";
 
   return (
     <Card>
@@ -46,7 +47,7 @@ export default function ShopProductCard({ product }) {
             {fCurrency(price.original)}
           </Label>
         )}
-        <StyledProductImg alt={name} src={image.cover} />
+        <StyledProductImg alt={name} src={URL + image.cover} />
       </Box>
       <Stack spacing={2} sx={{ p: 3 }}>
         {/* Wrap the product name with a Link */}
@@ -56,8 +57,8 @@ export default function ShopProductCard({ product }) {
           </Typography>
         </Link>
         <Stack direction="row" alignItems="center" justifyContent="space-between">
-          <Typography variant="subtitle1">Code :</Typography>
-          <Typography variant="subtitle2">{code}</Typography>
+          <Typography variant="subtitle2">Code :</Typography>
+          <Typography variant="body1">{code}</Typography>
         </Stack>
         <Stack direction="row" alignItems="center" justifyContent="space-between">
           <Typography variant="subtitle1">Price :</Typography>

@@ -30,6 +30,23 @@ function ProductForm({ initialProductData, onSubmit, isEditing }) {
   const [openModal, setOpenModal] = useState(false);
   const [modalType, setModalType] = useState();
 
+  const URL = "http://localhost:5000";
+
+  const modules = {
+    toolbar: [
+      [{ header: [1, 2, false] }],
+      ["bold", "italic", "underline", "strike"],
+      ["blockquote", "code-block"],
+      [{ list: "ordered" }, { list: "bullet" }],
+      [{ script: "sub" }, { script: "super" }],
+      [{ indent: "-1" }, { indent: "+1" }],
+      [{ direction: "rtl" }],
+      [{ align: [] }],
+      ["link", "image", "video"],
+      ["clean"],
+    ],
+  };
+
   useEffect(() => {
     if (isEditing && initialProductData) {
       const selectedProduct = initialProductData.product;
@@ -125,7 +142,7 @@ function ProductForm({ initialProductData, onSubmit, isEditing }) {
               {coverImage ? (
                 <div>
                   <img
-                    src={coverImage ? coverImage : null}
+                    src={coverImage ? URL + coverImage : null}
                     alt="Product Cover"
                     style={{ width: "100%", maxHeight: "400px", objectFit: "cover" }}
                   />
@@ -164,7 +181,7 @@ function ProductForm({ initialProductData, onSubmit, isEditing }) {
                 {galleryImages[index - 1] ? (
                   <>
                     <img
-                      src={galleryImages[index - 1]}
+                      src={URL + galleryImages[index - 1]}
                       alt="test"
                       style={{ maxWidth: "100%", maxHeight: "400px", objectFit: "cover" }}
                     />
@@ -263,7 +280,12 @@ function ProductForm({ initialProductData, onSubmit, isEditing }) {
             <div style={{ height: "30vh", marginBottom: "8vh", marginTop: "2vh" }}>
               {" "}
               {/* Set the height to 30vh and add margin bottom */}
-              <ReactQuill value={description} onChange={handleDescriptionChange} style={{ height: "100%" }} />
+              <ReactQuill
+                modules={modules}
+                value={description}
+                onChange={handleDescriptionChange}
+                style={{ height: "100%" }}
+              />
             </div>
           </Grid>
           <Grid item xs={12}>
