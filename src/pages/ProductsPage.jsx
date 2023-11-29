@@ -1,12 +1,12 @@
 import { Helmet } from "react-helmet-async";
 import { useNavigate } from "react-router-dom";
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 // @mui
 import { styled, alpha } from "@mui/material/styles";
 import { Container, Stack, Typography, Button, OutlinedInput, InputAdornment } from "@mui/material";
 // components
 import { useQuery } from "@tanstack/react-query";
+import { axios } from "../lib/axios";
 import { ProductList } from "../sections/@dashboard/products";
 // mock
 import Iconify from "../components/iconify";
@@ -49,11 +49,10 @@ export default function ProductsPage() {
   }, [productsList.isSuccess, productsList.data]);
 
   const fetchProducts = async () => {
-    const response = await axios.get(`http://localhost:5000/api/products/admin/search?Keyword=${searchWord}`, {
-      withCredentials: true,
-    });
+    const response = await axios.get(`http://localhost:5000/api/products/admin/search?Keyword=${searchWord}`);
     setProducts(response.data);
   };
+
   return (
     <>
       <Helmet>
@@ -97,7 +96,7 @@ export default function ProductsPage() {
             </Button>
           </Stack>
         </Stack>
-        <ProductList products={products} />
+        <ProductList key="Chad" products={products} />
       </Container>
     </>
   );

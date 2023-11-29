@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, forwardRef } from "react";
 import { useForm, Controller } from "react-hook-form";
 import {
   Modal,
@@ -15,13 +15,13 @@ import {
 } from "@mui/material";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-import axios from "axios";
 
 import "../../../styles/productForm.css";
+import { LoadingButton } from "@mui/lab";
 import Iconify from "../../../components/iconify";
 import ImageGallery from "../../../components/image-upload/imageUpload";
 
-function ProductForm({ initialProductData, onSubmit, isEditing }) {
+function ProductForm({ initialProductData, onSubmit, isEditing, isLoading }) {
   const { handleSubmit, control, reset } = useForm();
   const [description, setDescription] = useState("");
   const [displayImage, setDisplayImage] = useState(false);
@@ -30,7 +30,7 @@ function ProductForm({ initialProductData, onSubmit, isEditing }) {
   const [openModal, setOpenModal] = useState(false);
   const [modalType, setModalType] = useState();
 
-  const URL = "http://localhost:5000";
+  const URL = "http://localhost:5000/uploads";
 
   const modules = {
     toolbar: [
@@ -72,7 +72,6 @@ function ProductForm({ initialProductData, onSubmit, isEditing }) {
     }
   }, [isEditing, initialProductData, reset]);
 
-  console.log(galleryImages);
   const handleFormSubmit = (data) => {
     // Include the description from the state in the form data
     data.description = description;
@@ -109,7 +108,9 @@ function ProductForm({ initialProductData, onSubmit, isEditing }) {
   const handleCloseModal = () => {
     setOpenModal(false);
   };
-  const ImageGalleryWithRef = React.forwardRef((props, ref) => <ImageGallery ref={ref} {...props} />);
+
+  const ImageGalleryWithRef = forwardRef((props, ref) => <ImageGallery ref={ref} {...props} />);
+
   return (
     <Paper elevation={3} style={{ padding: "20px" }}>
       <Modal open={openModal} onClose={handleCloseModal}>
@@ -142,7 +143,7 @@ function ProductForm({ initialProductData, onSubmit, isEditing }) {
               {coverImage ? (
                 <div>
                   <img
-                    src={coverImage ? URL + coverImage : null}
+                    src={coverImage || null}
                     alt="Product Cover"
                     style={{ width: "100%", maxHeight: "400px", objectFit: "cover" }}
                   />
@@ -181,7 +182,7 @@ function ProductForm({ initialProductData, onSubmit, isEditing }) {
                 {galleryImages[index - 1] ? (
                   <>
                     <img
-                      src={URL + galleryImages[index - 1]}
+                      src={galleryImages[index - 1]}
                       alt="test"
                       style={{ maxWidth: "100%", maxHeight: "400px", objectFit: "cover" }}
                     />
@@ -278,7 +279,6 @@ function ProductForm({ initialProductData, onSubmit, isEditing }) {
           <Grid item xs={12}>
             <Typography variant="subtitle1">Description</Typography>
             <div style={{ height: "30vh", marginBottom: "8vh", marginTop: "2vh" }}>
-              {" "}
               {/* Set the height to 30vh and add margin bottom */}
               <ReactQuill
                 modules={modules}
@@ -289,9 +289,9 @@ function ProductForm({ initialProductData, onSubmit, isEditing }) {
             </div>
           </Grid>
           <Grid item xs={12}>
-            <Button type="submit" variant="contained" color="primary" fullWidth>
+            <LoadingButton loading={isLoading} type="submit" variant="contained" color="primary" fullWidth>
               {isEditing ? "Edit Product" : "Add Product"}
-            </Button>
+            </LoadingButton>
           </Grid>
         </Grid>
       </form>

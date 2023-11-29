@@ -2,8 +2,10 @@ import { Helmet } from "react-helmet-async";
 import { useNavigate } from "react-router-dom"; // Import the useNavigate hook
 // @mui
 
-import axios from "axios"; // Import Axios
 import { Container, Typography } from "@mui/material";
+import { useMutation } from "@tanstack/react-query";
+import toast from "react-hot-toast";
+import { axios } from "../lib/axios"; // Import Axios
 import ProductForm from "../sections/@dashboard/products/ProductForm";
 import Iconify from "../components/iconify";
 
@@ -11,25 +13,16 @@ import Iconify from "../components/iconify";
 
 export default function NewProductPage() {
   const navigate = useNavigate(); // Get the navigation function
-  const handleFormSubmit = async (data) => {
-    try {
-      const response = await axios.post("http://localhost:5000/api/products", data, {
-        withCredentials: true,
-      });
 
-      // Check if the request was successful
-      if (response.status === 201) {
-        // Optionally, you can handle success here, e.g., show a success message
-        console.log("Product created successfully");
-      } else {
-        // Handle other status codes as needed
-        console.error("Failed to create product");
-      }
-    } catch (error) {
-      // Handle any errors that occurred during the request, e.g., network error
-      console.error("Error creating product:", error);
-    }
-  };
+  const mutateCreateProduct = useMutation({
+    mutationFn: (data) => axios.post("products", data),
+    onSuccess: (data) => {
+      toast.success(data.message);
+    },
+    onError(error) {
+      toast.error(error?.response?.data?.error);
+    },
+  });
 
   const handleBackClick = () => {
     navigate("/dashboard/products"); // Navigate to the desired route
@@ -51,7 +44,7 @@ export default function NewProductPage() {
         <Typography variant="h4" sx={{ mb: 5 }}>
           New Products
         </Typography>
-        <ProductForm onSubmit={handleFormSubmit} />
+        <ProductForm isLoading={mutateCreateProduct.isLoading} onSubmit={mutateCreateProduct.mutate} />
       </Container>
     </>
   );
