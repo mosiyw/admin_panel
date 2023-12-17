@@ -10,7 +10,6 @@ import { useSignIn } from "react-auth-kit";
 import { Controller, useForm } from "react-hook-form";
 import Iconify from "../../../components/iconify";
 import { postLogin } from "../../../api/auth";
-import FormInputText from "../../../components/controlled-input";
 
 function LoginForm() {
   const navigate = useNavigate();
@@ -53,7 +52,7 @@ function LoginForm() {
           name="email"
           rules={{ required: true }}
           control={control}
-          render={({ field, fieldState }) => <TextField {...field} label="Email" error={fieldState.error} />}
+          render={({ field, fieldState }) => <TextField {...field} error={Boolean(fieldState.error)} label="Email" />}
         />
 
         <Controller
@@ -64,7 +63,7 @@ function LoginForm() {
             <TextField
               {...field}
               label="Password"
-              error={fieldState.error}
+              error={Boolean(fieldState.error)}
               type={showPassword ? "text" : "password"}
               InputProps={{
                 endAdornment: (
