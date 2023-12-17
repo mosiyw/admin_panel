@@ -50,6 +50,7 @@ function LoginForm() {
       <Stack spacing={3}>
         <Controller
           name="email"
+          defaultValue=""
           rules={{ required: true }}
           control={control}
           render={({ field, fieldState }) => <TextField {...field} error={Boolean(fieldState.error)} label="Email" />}
@@ -57,6 +58,7 @@ function LoginForm() {
 
         <Controller
           name="password"
+          defaultValue=""
           rules={{ required: true }}
           control={control}
           render={({ field, fieldState }) => (
