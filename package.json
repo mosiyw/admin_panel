@@ -23,6 +23,7 @@
     "change-case": "^4.1.2",
     "darkreader": "^4.9.67",
     "date-fns": "^2.29.3",
+    "easymde": "^2.18.0",
     "history": "^5.3.0",
     "js-cookie": "^3.0.5",
     "lodash": "^4.17.21",
@@ -39,6 +40,7 @@
     "react-quill": "^2.0.0",
     "react-router-dom": "^6.8.1",
     "react-scripts": "^5.0.1",
+    "react-simplemde-editor": "^5.2.0",
     "simplebar-react": "^3.2.1",
     "swr": "^2.2.4",
     "web-vitals": "^3.1.1"

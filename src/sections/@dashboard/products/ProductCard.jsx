@@ -1,3 +1,4 @@
+/* eslint-disable react/forbid-prop-types */
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom"; // Import Link from React Router
 import { Card, Typography, Stack, Box } from "@mui/material";
@@ -13,18 +14,7 @@ const StyledProductImg = styled("img")({
   position: "absolute",
 });
 
-ShopProductCard.propTypes = {
-  product: PropTypes.shape({
-    _id: PropTypes.string,
-    name: PropTypes.string,
-    price: PropTypes.object,
-    image: PropTypes.object,
-    code: PropTypes.string,
-    balance: PropTypes.number,
-  }),
-};
-
-export default function ShopProductCard({ product }) {
+function ShopProductCard({ product }) {
   const { name, _id, price, image, code, balance } = product;
   const URL = "http://localhost:5000";
 
@@ -47,10 +37,9 @@ export default function ShopProductCard({ product }) {
             {fCurrency(price.original)}
           </Label>
         )}
-        <StyledProductImg alt={name} src={URL + image.cover} />
+        <StyledProductImg src={`${URL}${image.cover}`} />
       </Box>
       <Stack spacing={2} sx={{ p: 3 }}>
-        {/* Wrap the product name with a Link */}
         <Link to={`editproduct/${_id}`} style={{ textDecoration: "none" }}>
           <Typography variant="subtitle2" noWrap style={{ direction: "rtl" }}>
             {name}
@@ -58,7 +47,9 @@ export default function ShopProductCard({ product }) {
         </Link>
         <Stack direction="row" alignItems="center" justifyContent="space-between">
           <Typography variant="subtitle2">Code :</Typography>
-          <Typography variant="body1">{code}</Typography>
+          <Typography noWrap variant="body1">
+            {code}
+          </Typography>
         </Stack>
         <Stack direction="row" alignItems="center" justifyContent="space-between">
           <Typography variant="subtitle1">Price :</Typography>
@@ -75,3 +66,16 @@ export default function ShopProductCard({ product }) {
     </Card>
   );
 }
+
+ShopProductCard.propTypes = {
+  product: PropTypes.shape({
+    _id: PropTypes.string,
+    name: PropTypes.string,
+    price: PropTypes.object,
+    image: PropTypes.object,
+    code: PropTypes.string,
+    balance: PropTypes.number,
+  }).isRequired,
+};
+
+export default ShopProductCard;

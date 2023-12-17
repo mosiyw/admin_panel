@@ -31,7 +31,7 @@ function LoginForm() {
           },
         });
 
-        navigate("/dashboard");
+        navigate("/dashboard/app");
       }
 
       toast.success(data.message);

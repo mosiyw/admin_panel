@@ -9,8 +9,6 @@ import { axios } from "../lib/axios"; // Import Axios
 import ProductForm from "../sections/@dashboard/products/ProductForm";
 import Iconify from "../components/iconify";
 
-// --------------------------------------------------------------
-
 export default function NewProductPage() {
   const navigate = useNavigate(); // Get the navigation function
 
@@ -44,6 +42,7 @@ export default function NewProductPage() {
         <Typography variant="h4" sx={{ mb: 5 }}>
           New Products
         </Typography>
+
         <ProductForm isLoading={mutateCreateProduct.isLoading} onSubmit={mutateCreateProduct.mutate} />
       </Container>
     </>

@@ -37,8 +37,6 @@ const StyledContent = styled("div")(({ theme }) => ({
   padding: theme.spacing(12, 0),
 }));
 
-// ----------------------------------------------------------------------
-
 export default function LoginPage() {
   const mdUp = useResponsive("up", "md");
 

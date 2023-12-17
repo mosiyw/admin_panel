@@ -1,3 +1,5 @@
+/* eslint-disable react/no-unstable-nested-components */
+/* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable react/prop-types */
 import React, { useState, useEffect, forwardRef } from "react";
 import { useForm, Controller } from "react-hook-form";
@@ -12,17 +14,20 @@ import {
   MenuItem,
   FormControl,
   InputLabel,
+  Box,
 } from "@mui/material";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
-
 import "../../../styles/productForm.css";
 import { LoadingButton } from "@mui/lab";
 import Iconify from "../../../components/iconify";
 import ImageGallery from "../../../components/image-upload/imageUpload";
+import ControlledInputText from "../../../components/controlled-input";
+import RichEditor from "../../../components/rich-editor";
 
 function ProductForm({ initialProductData, onSubmit, isEditing, isLoading }) {
   const { handleSubmit, control, reset } = useForm();
+
   const [description, setDescription] = useState("");
   const [displayImage, setDisplayImage] = useState(false);
   const [coverImage, setCoverImage] = useState();
@@ -73,7 +78,6 @@ function ProductForm({ initialProductData, onSubmit, isEditing, isLoading }) {
   }, [isEditing, initialProductData, reset]);
 
   const handleFormSubmit = (data) => {
-    // Include the description from the state in the form data
     data.description = description;
     data.image = { cover: coverImage, images: galleryImages };
     data.galleryImages = galleryImages;
@@ -123,6 +127,7 @@ function ProductForm({ initialProductData, onSubmit, isEditing, isLoading }) {
       <Typography variant="h6" gutterBottom>
         {isEditing ? "Edit Product" : "New Product"}
       </Typography>
+
       <form onSubmit={handleSubmit(handleFormSubmit)}>
         <Grid container spacing={2}>
           <Grid item xs={2}>
@@ -196,42 +201,42 @@ function ProductForm({ initialProductData, onSubmit, isEditing, isLoading }) {
               </Button>
             </Grid>
           ))}
+
+          {/* Product info section */}
           <Grid item xs={12}>
-            <Controller
+            <ControlledInputText
               name="name"
+              label="Product Name"
+              rules={{ required: true }}
               control={control}
-              defaultValue=""
-              render={({ field }) => <TextField {...field} label="Product Name" variant="outlined" fullWidth />}
+              fullWidth
             />
           </Grid>
           <Grid item xs={4}>
-            <Controller
+            <ControlledInputText
               name="price.original"
+              label="Original Price"
+              rules={{ required: true }}
               control={control}
-              defaultValue="" // Set defaultValue here
-              render={({ field }) => (
-                <TextField {...field} label="Original Price" variant="outlined" fullWidth type="number" />
-              )}
+              fullWidth
             />
           </Grid>
           <Grid item xs={4}>
-            <Controller
+            <ControlledInputText
               name="price.discount"
+              label="Discount Price"
+              rules={{ required: true }}
               control={control}
-              defaultValue="" // Set defaultValue here
-              render={({ field }) => (
-                <TextField {...field} label="Discount Price" variant="outlined" fullWidth type="number" />
-              )}
+              fullWidth
             />
           </Grid>
           <Grid item xs={4}>
-            <Controller
+            <ControlledInputText
               name="balance"
+              label="Balance"
+              rules={{ required: true }}
               control={control}
-              defaultValue=""
-              render={({ field }) => (
-                <TextField {...field} label="Balance" variant="outlined" fullWidth type="number" />
-              )}
+              fullWidth
             />
           </Grid>
           <Grid item xs={8}>
@@ -241,8 +246,9 @@ function ProductForm({ initialProductData, onSubmit, isEditing, isLoading }) {
                 name="category"
                 control={control}
                 defaultValue=""
-                render={({ field }) => (
-                  <Select {...field} labelId="category-label" label="Category">
+                rules={{ required: true }}
+                render={({ field, fieldState: { error } }) => (
+                  <Select {...field} error={Boolean(error)} labelId="category-label" label="Category">
                     <MenuItem value="Electronics">Electronics</MenuItem>
                     <MenuItem value="Clothing">Clothing</MenuItem>
                     <MenuItem value="Home">Home</MenuItem>
@@ -256,11 +262,12 @@ function ProductForm({ initialProductData, onSubmit, isEditing, isLoading }) {
             <Controller
               name="isActive"
               control={control}
-              defaultValue={false} // Set defaultValue for isActive
-              render={({ field }) => (
+              defaultValue={false}
+              rules={{ required: true }}
+              render={({ field, fieldState: { error } }) => (
                 <FormControl fullWidth variant="outlined">
                   <InputLabel id="is-active-label">Status</InputLabel>
-                  <Select {...field} labelId="is-active-label" label="Status">
+                  <Select {...field} error={Boolean(error)} labelId="is-active-label" label="Status">
                     <MenuItem value>Active</MenuItem>
                     <MenuItem value={false}>Inactive</MenuItem>
                   </Select>
@@ -269,25 +276,16 @@ function ProductForm({ initialProductData, onSubmit, isEditing, isLoading }) {
             />
           </Grid>
           <Grid item xs={4}>
-            <Controller
-              name="code"
-              control={control}
-              defaultValue="" // Set defaultValue here
-              render={({ field }) => <TextField {...field} label="Code" variant="outlined" fullWidth />}
-            />
+            <ControlledInputText name="code" label="Code" rules={{ required: true }} control={control} fullWidth />
           </Grid>
           <Grid item xs={12}>
             <Typography variant="subtitle1">Description</Typography>
-            <div style={{ height: "30vh", marginBottom: "8vh", marginTop: "2vh" }}>
-              {/* Set the height to 30vh and add margin bottom */}
-              <ReactQuill
-                modules={modules}
-                value={description}
-                onChange={handleDescriptionChange}
-                style={{ height: "100%" }}
-              />
-            </div>
+
+            <Box paddingY={2}>
+              <RichEditor value={description} onChange={handleDescriptionChange} />
+            </Box>
           </Grid>
+
           <Grid item xs={12}>
             <LoadingButton loading={isLoading} type="submit" variant="contained" color="primary" fullWidth>
               {isEditing ? "Edit Product" : "Add Product"}

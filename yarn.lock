@@ -3312,6 +3312,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/codemirror@npm:^5.60.4, @types/codemirror@npm:~5.60.5":
+  version: 5.60.15
+  resolution: "@types/codemirror@npm:5.60.15"
+  dependencies:
+    "@types/tern": "npm:*"
+  checksum: 4d32ee8d335650956fc59b26f29909de0656ce9c68f7527caf2aa68e6a6a2e8be6ec7a6b80c02bfab7ac6b17040d6c2d83d394b9d00fdbf4b5588691f2efbba6
+  languageName: node
+  linkType: hard
+
 "@types/connect-history-api-fallback@npm:^1.3.5":
   version: 1.5.2
   resolution: "@types/connect-history-api-fallback@npm:1.5.2"
@@ -3473,6 +3482,13 @@ __metadata:
   version: 4.14.200
   resolution: "@types/lodash@npm:4.14.200"
   checksum: 7a8dac6dc866f10d1888846d6189d1faeb4f65adb139f0837a005fd1adcde62e60d7e7abb1a2733d13fc57bebb337d74182d8ad3dbd1d211dcd0c310c47e81bc
+  languageName: node
+  linkType: hard
+
+"@types/marked@npm:^4.0.7":
+  version: 4.3.2
+  resolution: "@types/marked@npm:4.3.2"
+  checksum: 6f44d28da5c940a719d6c6aca41e33f49c5fe957f7972939cc1cbb47d045951f4d969f382d655345d0463e47db1994635d2862018716fcef2fa85ceeceb116e7
   languageName: node
   linkType: hard
 
@@ -3652,6 +3668,15 @@ __metadata:
   version: 2.0.2
   resolution: "@types/stack-utils@npm:2.0.2"
   checksum: c2bf0de59ee0a1e2b2031e8a6225f412976377868c42a66537e284a020e9eb4068ed9b9da69d14c1727ab56e605532e877777c7d1bbfd3e9a42ae17bcef7d213
+  languageName: node
+  linkType: hard
+
+"@types/tern@npm:*":
+  version: 0.23.9
+  resolution: "@types/tern@npm:0.23.9"
+  dependencies:
+    "@types/estree": "npm:*"
+  checksum: 1d30ccfbb84362fe7a7edeea3ba5268f5a7a0965d504147c6b701092f0ea3f0833799ee753e2059a535ca06590f91dd2416e4bd94a6e8ad51eea127a0607c617
   languageName: node
   linkType: hard
 
@@ -5206,6 +5231,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"codemirror-spell-checker@npm:1.1.2":
+  version: 1.1.2
+  resolution: "codemirror-spell-checker@npm:1.1.2"
+  dependencies:
+    typo-js: "npm:*"
+  checksum: 3846e6c6eb81d165db72cb2e15c413f3b948c0dd779c500d254aea417fe1cc58580688b78eb860a84c45e11251b5cd6a61a477141fa39dd3a2b04c2f5c91e474
+  languageName: node
+  linkType: hard
+
+"codemirror@npm:^5.63.1":
+  version: 5.65.16
+  resolution: "codemirror@npm:5.65.16"
+  checksum: 72ab3aae5ee0511b33348761da43585a0368f2845016f1fe177e1aa9bf3d7beee7f98550ffd82908726bf731df2376dc371e383bf4c0c91a66e3f18d0b7c4f3b
+  languageName: node
+  linkType: hard
+
 "collect-v8-coverage@npm:^1.0.0":
   version: 1.0.2
   resolution: "collect-v8-coverage@npm:1.0.2"
@@ -6189,6 +6230,19 @@ __metadata:
   version: 0.2.0
   resolution: "eastasianwidth@npm:0.2.0"
   checksum: 26f364ebcdb6395f95124fda411f63137a4bfb5d3a06453f7f23dfe52502905bd84e0488172e0f9ec295fdc45f05c23d5d91baf16bd26f0fe9acd777a188dc39
+  languageName: node
+  linkType: hard
+
+"easymde@npm:^2.18.0":
+  version: 2.18.0
+  resolution: "easymde@npm:2.18.0"
+  dependencies:
+    "@types/codemirror": "npm:^5.60.4"
+    "@types/marked": "npm:^4.0.7"
+    codemirror: "npm:^5.63.1"
+    codemirror-spell-checker: "npm:1.1.2"
+    marked: "npm:^4.1.0"
+  checksum: de9c6a57a7191df5abce56e8414797ef5d7a2e6d68bbd090e5bc0e50dbd3e2edc50fc4a90c16f8cbbe70a3e06b35d84419d0817aebcd31d959b33bc7b201ae6b
   languageName: node
   linkType: hard
 
@@ -9836,6 +9890,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"marked@npm:^4.1.0":
+  version: 4.3.0
+  resolution: "marked@npm:4.3.0"
+  bin:
+    marked: bin/marked.js
+  checksum: 0013463855e31b9c88d8bb2891a611d10ef1dc79f2e3cbff1bf71ba389e04c5971298c886af0be799d7fa9aa4593b086a136062d59f1210b0480b026a8c5dc47
+  languageName: node
+  linkType: hard
+
 "mdn-data@npm:2.0.14":
   version: 2.0.14
   resolution: "mdn-data@npm:2.0.14"
@@ -12170,6 +12233,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-simplemde-editor@npm:^5.2.0":
+  version: 5.2.0
+  resolution: "react-simplemde-editor@npm:5.2.0"
+  dependencies:
+    "@types/codemirror": "npm:~5.60.5"
+  peerDependencies:
+    easymde: ">= 2.0.0 < 3.0.0"
+    react: ">=16.8.2"
+    react-dom: ">=16.8.2"
+  checksum: 6b352fe0634cc45277502b83eeb70030d50a0726943b8e343e4afccb0dd152a395a533c151795a9724ec61413a3567fd23ed209d60f0ec283006add12b0c120e
+  languageName: node
+  linkType: hard
+
 "react-transition-group@npm:^4.4.5":
   version: 4.4.5
   resolution: "react-transition-group@npm:4.4.5"
@@ -13767,6 +13843,7 @@ __metadata:
     change-case: "npm:^4.1.2"
     darkreader: "npm:^4.9.67"
     date-fns: "npm:^2.29.3"
+    easymde: "npm:^2.18.0"
     eslint: "npm:^8.45.0"
     eslint-config-airbnb: "npm:^19.0.4"
     eslint-config-prettier: "npm:^9.0.0"
@@ -13792,6 +13869,7 @@ __metadata:
     react-quill: "npm:^2.0.0"
     react-router-dom: "npm:^6.8.1"
     react-scripts: "npm:^5.0.1"
+    react-simplemde-editor: "npm:^5.2.0"
     simplebar-react: "npm:^3.2.1"
     swr: "npm:^2.2.4"
     vite: "npm:^4.4.5"
@@ -14065,6 +14143,13 @@ __metadata:
   dependencies:
     is-typedarray: "npm:^1.0.0"
   checksum: 4ac5b7a93d604edabf3ac58d3a2f7e07487e9f6e98195a080e81dbffdc4127817f470f219d794a843b87052cedef102b53ac9b539855380b8c2172054b7d5027
+  languageName: node
+  linkType: hard
+
+"typo-js@npm:*":
+  version: 1.2.3
+  resolution: "typo-js@npm:1.2.3"
+  checksum: 7bc52e41d0d0de63a0a56af3571b9c14cee0fc8d3c4ab9b3c2d8cb1d085a13197ecc9270a154736391271553dff637742e14ca6df9c76406a4461681790142e8
   languageName: node
   linkType: hard
 
